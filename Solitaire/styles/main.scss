@@ -1,0 +1,222 @@
+
+:root {
+    --primary-light: #8abdff;
+    --primary: #6d5dfc;
+    --primary-dark: #5b0eeb;
+
+    --white: #FFFFFF;
+    --greyLight-1: #E4EBF5;
+    --greyLight-2: #c8d0e7;
+    --greyLight-3: #bec8e4;
+    --greyDark: #9baacf;
+  }
+
+$shadow: .3rem .3rem .6rem var(--greyLight-2),
+-.2rem -.2rem .5rem var(--white);
+$inner-shadow: inset .2rem .2rem .5rem var(--greyLight-2),
+inset -.2rem -.2rem .5rem var(--white);
+
+
+html {
+    box-sizing: border-box;
+    font-size: 62.5%; // 1rem = 10px    100% = 16px
+    overflow-y: scroll;
+    background: var(--greyLight-1);
+    font-family: proxima-nova,sans-serif;
+    font-weight: 300;
+    font-style: normal;
+    @media screen and (min-width: 900px) {
+          font-size: 75%; }
+  }
+
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+header{
+    margin: 30px;
+    margin-bottom: 30px;
+    max-width: 1300px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.rightheader{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+h1 {
+    font-size: 50px;
+    background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(78,9,121,0.8911939775910365) 48%, rgba(0,212,255,1) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    padding: 20px 20px 0px;
+    border-radius: 900px;
+    font-family: proxima-nova,sans-serif;
+    font-weight: 700;
+    font-style: normal;
+  }
+
+
+  p {
+    font-size: 13px;
+    background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(39,5,60,0.8911939775910365) 48%, rgba(0,100,160,1) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    padding: 0px 20px 20px;
+    border-radius: 900px;
+    font-family: proxima-nova,sans-serif;
+    font-weight: 700;
+    font-style: normal;
+  }
+
+.headerbutton{
+    background-color: transparent;
+    border: none;
+    font-family: proxima-nova,sans-serif;
+    font-weight: 300;
+    font-style: normal;
+    box-shadow: $shadow;
+    padding: 10px 20px;
+    margin: 5px 20px 1px;
+    border-radius: 100px;
+    font-size: 18px;
+    color:var(--greyDark);
+    transition: box-shadow 2s;
+}
+
+
+
+.maingrid {
+    margin: 30px;
+    max-width: 1300px;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    grid-template-rows: 250px 1fr;
+    grid-template-areas:
+    "downpile uppile . clubcollector diamondcollector spadecollector heartcollector"
+    "pile1 pile2 pile3 pile4 pile5 pile6 pile7"
+}
+
+.cardslot{
+   width: 135px;
+   height: 189px;
+   border-radius: 6px;
+   position: relative;
+   box-shadow:$inner-shadow
+}
+
+.card .cardslot{
+    position: absolute;
+    top: 35px;
+}
+
+
+#downpile {
+    grid-area: downpile;
+    position: relative;
+}
+
+#uppile {
+    grid-area: uppile;
+}
+
+#downpile *,
+#uppile *,
+#spadecollector *,
+#clubcollector *,
+#heartcollector *,
+#diamondcollector *{
+    position: absolute;
+    top: -0.5px;
+    box-shadow: none;
+}
+
+.pile [data-faceup='false'] > *{
+    top: 15px;
+}
+
+.card{
+    background-size: contain;
+    width: 135px;
+    height: 189px;
+    position: relative;
+    z-index: 100;
+    opacity: 99.5%;
+}
+
+
+
+
+// COLLECTOR STYLING
+
+#clubcollector {
+    background-image: url(../assets/big-club-shadow.png);
+    grid-area: clubcollector;
+    background-repeat: no-repeat;
+    background-size: 80%;
+    background-position-x: 13px;
+    background-position-y: 30px;
+}
+
+#diamondcollector{
+    background-image: url(../assets/big-diamond-shadow.png);
+    grid-area: diamondcollector;
+    background-size: 65%;
+    background-repeat: no-repeat;
+    background-position-x: 23px;
+    background-position-y: 30px;
+}
+
+#spadecollector{
+    background-image: url(../assets/big-spade-shadow.png);
+    grid-area: spadecollector;
+    background-size: 70%;
+    background-repeat: no-repeat;
+    background-position-x: 20px;
+    background-position-y: 30px;
+}
+
+#heartcollector{
+    background-image: url(../assets/big-heart-shadow.png);
+    grid-area: heartcollector;
+    background-repeat: no-repeat;
+    background-size: 80%;
+    background-position-x: 14px;
+    background-position-y: 35px;
+}
+
+//GRID LAYOUT
+
+#pile1{
+    grid-area: pile1;
+}
+
+#pile2{
+    grid-area: pile2;
+}
+
+#pile3{
+    grid-area: pile3;
+}
+
+#pile4{
+    grid-area: pile4;
+}
+
+#pile5{
+    grid-area: pile5;
+}
+
+#pile6{
+    grid-area: pile6;
+}
+
+#pile7{
+    grid-area: pile7;
+}
