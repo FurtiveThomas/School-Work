@@ -1,0 +1,60 @@
+body {
+    font-family: Arial;
+    font-size: 20px;
+}
+
+div {
+    border-width: 0.3rem;
+    border-style: solid;
+    border-color: #555;
+    border-radius: 1rem;
+    background-color: #CCC;
+    padding: 1rem;
+    margin: 0.3rem;
+}
+
+.bare-container {
+    border-width: 0;
+    border-style: none;
+    border-color: transparent;
+    border-radius: 0;
+    background-color: transparent;
+    padding: 0;
+    margin: 0;
+}
+
+.text-red {
+    color: #f22;
+}
+
+.text-green {
+    color: #2f2;
+}
+
+button, .button-greenl, .button-disabled {
+    border-width: 0.3rem;
+    border-style: solid;
+    border-color: #555;
+    border-radius: 1rem;
+    padding: 1rem;
+    font-size: 1rem;
+    cursor: pointer;
+    margin: 0.3rem;
+}
+
+button {
+    background-color: #CCC;
+    user-select: none;
+}
+
+.button-green {
+    background-color: #2f2;
+}
+
+.button-disabled {
+    cursor: default;
+}
+
+.hidden {
+    display: none;
+}
