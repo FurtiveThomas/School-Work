@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>YouTube</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <style>
+      html {
+        font-family: 'Nunito', sans-serif;
+        color: white;
+        background-color: rgb(20, 20, 20);
+      }
+      iframe {
+        width: 1000px;
+        height: 563px;
+      }
+      .center {
+        text-align: center;
+      }
+      footer {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgb(20,20,20);
+      }
+      a {
+      color: white;
+        text-decoration: underline;
+      }
+      #video-holder:last-child {
+        margin-bottom: 5rem !important;
+      }
+      *::before, *::after {
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+      }
+      button, input {
+    	border-radius: 4px;
+    	outline: none;
+    	border: 2px solid rgb(45, 45, 45);
+      }
+      button {
+    	background-color: rgb(45, 45, 45);
+    	width: 4rem;
+    	color: white;
+    	height: 1.3rem;
+      }
+      input {
+        height: 1.2rem;
+    	outline: none;
+      }
+      input:focus, textarea:focus, select:focus{
+        outline: none;
+      }
+      button:active {
+    	background-color: rgb(25, 25, 25);
+    	color: rgb(224, 224, 224);
+      }
+      .space {
+        background-color: transparent;
+        border-color: transparent;
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+        height: 30px;
+      }
+      @media screen and (max-width: 600px) {
+        html {
+          font-size: 1.4rem;
+          margin-bottom: 40px;
+        }
+      }
+  </style>
+  <!-- FONTS -->
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200;0,300;0,400;0,600;0,800;0,900;1,200;1,300;1,400;1,600;1,700;1,800;1,900&display=swap"; rel="stylesheet">
+  <!-- Analytics -->
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-QR0J225RDB"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-QR0J225RDB');
+  </script>
+</head>
+<body>
+  <div id="instructions" class="center">
+    <h1 class="center">YouTube</h5>
+      <div class=center>
+	<h3>Insert YouTube Link:</h3>
+ 	<input id="url" type="text" placeholder="" required>
+      <button id="submit" class="submit-button">Watch</button>
+    </div>
+  </div>
+  <br>
+  <div id="video-holder-holder">
+    <div id="video-holder" class="center" style="display:none;">
+      <hr style="display: none";>
+      <iframe id="video" src="https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ?wmode=transparent&amp;iv_load_policy=3&amp;autoplay=0&amp;html5=1&amp;showinfo=0&amp;rel=0&amp;modestbranding=1&amp;playsinline=0&amp;theme=light" frameborder="0" scrolling="no" allowfullscreen="" webkitallowfullscreen="" mozallowfullscreen=""></iframe>
+    </div>
+  </div>
+</body>
+<script>
+  const base = "https://www.youtube-nocookie.com/embed/";
+  const end = "?wmode=transparent&amp;iv_load_policy=3&amp;autoplay=0&amp;html5=1&amp;showinfo=0&amp;rel=0&amp;modestbranding=1&amp;playsinline=0&amp;theme=light";   const strip_timestamps = /\?t=\d+/;
+  var submit = document.getElementById('submit');
+  var download = document.getElementById('download');
+  var url = document.getElementById('url');
+  var video_holder;
+  var video_holder_holder = document.getElementById('video-holder-holder');
+  var link;
+  let id;
+  submit.onclick = () => {
+    if(document.getElementById('instructions')) {
+      document.getElementById('instructions').remove();
+    }
+    link = url.value;
+    id = link.replace(strip_timestamps, "");
+    id = id.split("&");
+    id = id[0].substr(id[0].length - 11, 11);
+
+    video_holder = document.getElementById('video-holder').cloneNode(true);
+    video_holder.style.display = 'block';
+    video_holder.children[1].src = base + id+ end;
+    video_holder_holder.appendChild(video_holder);
+  }
+</script>
+</html>
