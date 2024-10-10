@@ -12,4 +12,4 @@
 
 
 
-School Work Work learn math code english U.S.A Teacher Work School 
+School Work, Work, learn, math, code, english, U.S.A, Teacher, Work School
