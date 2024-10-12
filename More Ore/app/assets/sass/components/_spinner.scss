@@ -1,0 +1,70 @@
+$ore-weak-spot-outer-size: 22px;
+$ore-weak-spot-inner-size: 10px;
+
+$outer-border-width: 3px;
+$inner-border-width: 3px;
+
+$border-outer-base-color: #f3f3f3;
+$border-inner-base-color: #a29a97;
+
+$border-outer-hover-color: gold;
+$border-inner-hover-color: cyan;
+
+.ore-weak-spot {
+  display: none;
+  pointer-events: all;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  cursor: pointer;
+  height: $ore-weak-spot-outer-size;
+  width: $ore-weak-spot-outer-size;
+
+  & * {
+    pointer-events: none;
+    border-radius: 50%;
+    transition: all .1s;
+  }
+
+  .ore-weak-spot-outer {
+    height: 100%;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.2);
+    border: $outer-border-width solid $border-outer-base-color;
+    border-top-color: darkgrey;
+    border-bottom-color: darkgrey;
+    animation: spin 1s linear infinite;
+  }
+
+  .ore-weak-spot-inner {
+    position: absolute;
+    height: $ore-weak-spot-inner-size;
+    width: $ore-weak-spot-inner-size;
+    top: ( $ore-weak-spot-outer-size - $ore-weak-spot-inner-size ) / 2;
+    left: ( $ore-weak-spot-outer-size - $ore-weak-spot-inner-size ) / 2;
+    border: $inner-border-width solid $border-inner-base-color;
+    border-left-color: transparent; 
+    border-right-color: transparent;
+    animation: spin_counterclockwise .5s linear infinite;
+  }
+
+  &:hover {
+
+    .ore-weak-spot-outer {
+      animation-duration: .5s;
+      border-left-color: $border-outer-hover-color;
+      border-right-color: $border-outer-hover-color;
+    }
+
+    .ore-weak-spot-inner {
+      border-top-color: $border-inner-hover-color;
+      border-bottom-color: $border-inner-hover-color;
+      animation-duration: .3s;
+    }
+  }
+}
+
+@keyframes spin_counterclockwise {
+  0% { transform: rotate( 0deg ); }
+  100% { transform: rotate( -360deg ); }
+}

@@ -1,0 +1,46 @@
+.particle {
+
+  position: absolute;
+  height: 3px;
+  width: 3px;
+  border-radius: 50%;
+  background: lightgrey;
+  transition: all .7s;
+  pointer-events: none;
+}
+
+
+
+@keyframes particle_fall {
+  0% {
+    transform: translateY( 0 );
+    opacity: 1;
+  }
+  25% {
+    transform: translateY( -10px );
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY( 100px );
+    opacity: 0;
+  }
+}
+
+@keyframes particle_fall_further {
+  0% {
+    transform: translateY( 0 );
+    opacity: 1;
+  }
+  15% {
+    transform: translateY( -10px );
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY( 300px );
+    opacity: 0;
+  }
+}

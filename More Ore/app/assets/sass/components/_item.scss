@@ -1,0 +1,61 @@
+.item-container {
+    position: fixed;
+    z-index: 3;
+    height: 64px;
+    width: 64px;
+    cursor: pointer;
+    transition: transform .3s;
+
+    &:hover {
+
+        .item {
+            animation: wiggle .3s ease-in-out infinite alternate-reverse;
+        }
+    }
+
+    .item {
+        pointer-events: none;
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        // background: darkgray;
+        // border: 4px double black;
+        background: url( './assets/images/misc-item_pouch.png' );
+        background-size: 100%;
+        image-rendering: pixelated;
+    }
+
+    .item-shine {
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        background: url( './assets/images/misc-shine.png');
+        opacity: 0.1;
+        animation: rotate 10s linear infinite;
+        pointer-events: none;
+
+        &:nth-child( 2 ) {
+            animation: rotate 10s reverse infinite;
+        }
+    }
+}
+
+@keyframes wiggle {
+    from {
+        transform: rotate( -10deg ) scale( 1.09 );
+    }
+    to {
+        transform: rotate( 10deg ) scale( 1.09 );
+    }
+}
+
+.hoverable-item {
+    height: 21px;
+    width: 25px;
+    background: url( './assets/images/ore.png' );
+    background-size: 100%;
+    pointer-events: none;
+    position: absolute;
+}

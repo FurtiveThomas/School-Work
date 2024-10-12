@@ -1,0 +1,169 @@
+.wrapper > .confirm-refine {
+  width: fit-content;
+
+  header {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+
+    .gem {
+      image-rendering: pixelated;
+      height: 40px;
+    }
+
+    h1 {
+      letter-spacing: 1px;
+      font-family: 'Germania One';
+      text-shadow: 0 0 5px gold, 0 0 4px red;
+    }
+
+  }
+
+  .gain {
+    color: lightgreen;
+  }
+
+  .lose {
+    color: #c36d6d;
+  }
+
+  .confirmation-text {
+    text-align: center;
+    font-weight: bold;
+    opacity: .7;
+
+    span {
+      display: inline-block;
+      position: relative;
+
+      &:before, &:after {
+        content: '';
+        position: absolute;
+        // height: 5px;
+        border-bottom: 1px solid white;
+        border-top: 1px solid white;
+        top: 8px;
+        width: 40px;
+      }
+
+      &:before {
+        right: 100%;
+        margin-right: 10px;
+      }
+
+      &:after {
+        left: 100%;
+        margin-left: 10px;
+      }
+    }
+  }
+
+  .button-container {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: center;
+    padding-top: 10px;
+
+    button {
+      padding: 3px 6px;
+      background: transparent;
+      color: white;
+      margin: 0 5px;
+      cursor: pointer;
+      opacity: .8;
+
+      &:hover {
+        opacity: 1;
+      }
+    }
+  }
+}
+
+.refine-animation {
+  z-index: 10;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+
+  display: flex;
+  flex-flow: row nowrap;
+
+  > div {
+    width: 50%;
+    height: 100%;
+    opacity: 0;
+    background: black;
+
+    &:nth-child( 1 ) {
+      animation: refine_animation_left 2s forwards;
+    }
+
+    &:nth-child( 2 ) {
+      animation: refine_animation_right 2s forwards;
+    }
+  }
+}
+
+@keyframes refine_animation_left {
+
+  0% {
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 1;
+    transform: translateX( 0 );
+    background: black;
+  }
+
+  70% {
+    background: white;
+    transform: translateX( 0 );
+    opacity: 1;
+  }
+
+  85% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateX( -100% );
+    background: white;
+  }
+
+}
+
+@keyframes refine_animation_right {
+
+  0% {
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 1;
+    transform: translateX( 0 );
+    background: black;
+  }
+
+  70% {
+    background: white;
+    transform: translateX( 0 );
+    opacity: 1;
+  }
+
+  85% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateX( 100% );
+    background: white;
+  }
+
+}

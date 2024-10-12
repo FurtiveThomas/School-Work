@@ -1,0 +1,515 @@
+.wrapper > #quest-board {
+  height: 700px;
+  width: 500px;
+  background-color: #553817;
+  border: 10px double #362108;
+  box-shadow: 0 0 10px 5px black, 0 0 20px black inset;
+  border-radius: 5px;
+  padding: 0;
+
+  header {
+    text-align: center;
+    padding: 10px 0;
+
+    h1 {
+      font-family: 'Germania One';
+      font-size: 55px;
+      text-shadow: 0 0 10px #222, 0 0 5px gold;
+    }
+  }
+
+  .quest-board-quests {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-evenly;
+
+    .quest {
+      height: 300px;
+      width: 200px;
+      background-color: #fffae0;
+      background-image: url("https://www.transparenttextures.com/patterns/beige-paper.png");
+      padding: 10px;
+      transition: all .2s;
+      color: black;
+      cursor: pointer;
+      text-align: center;
+      position: relative;
+      margin-bottom: 30px;
+
+      .completed, .in-progress {
+        font-weight: bold;
+        color: red;
+        position: absolute;
+        top: 70%;
+        left: 50%;
+        transform: translateX( -50% ) rotate( -20deg );
+        border: 4px solid red;
+        padding: 5px;
+        font-size: 30px;
+
+        &.golden {
+          background: #f6cd44;
+          color: gold;
+          border: 5px ridge #f6cd44;
+          text-shadow: 0 0 2px black;
+          letter-spacing: 1.5px;
+          transform: translateX( -50% );
+          top: 77%;
+        }
+      }
+
+      .in-progress {
+        top: 30%;
+        color: black;
+        border-color: black;
+        transform: translateX( -50% ) rotate( 20deg );
+      }
+
+      * {
+        pointer-events: none;
+      }
+
+      &.locked {
+        pointer-events: none;
+        // opacity: 0.6;
+        filter: brightness( 50% );
+      }
+
+      &:hover {
+        transform: translateY( -6px );
+        box-shadow: 0 6px 10px rgba( 0, 0, 0, 0.3 );
+      }
+
+      .pin {
+        height: 7px;
+        width: 7px;
+        border-radius: 50%;
+        margin: 0 auto;
+        background: red;
+        box-shadow: 0 2px 5px #222;
+        margin-bottom: 10px;
+      }
+
+      .quest-name {
+      }
+    }
+  }
+}
+
+.wrapper > #quest-sheet {
+  // height: 600px;
+  width: 400px;
+  background-color: #fffae0;
+  background-image: url("https://www.transparenttextures.com/patterns/beige-paper.png");
+  text-align: center;
+  padding: 10px 25px;
+  border: none;
+  color: black;
+  border-radius: 0;
+  position: relative;
+  overflow: visible;
+  
+  .pin {
+    height: 10px;
+    width: 10px;
+    border-radius: 50%;
+    margin: 0 auto;
+    background: red;
+    box-shadow: 0 2px 5px #222;
+    margin-bottom: 5px;
+  }
+
+  header {
+
+    h1 {
+      color: #222;
+      text-align: center;
+      font-family: 'Germania One';
+      font-size: 45px;
+    }
+
+    i {
+      color: black;
+      cursor: pointer;
+    }
+  }
+
+  .quest-img {
+    height: 200px;
+    width: 350px;
+    margin: 5px 0 20px 0;
+  }
+
+  .info-container {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: flex-start;
+    text-align: left;
+    padding-bottom: 70px;
+    color: #333;
+
+    .left {
+      border-right: 1px solid #b1b1b1;
+
+      p, i {
+        padding-right: 10px;
+      }
+
+      i {
+        opacity: .6;
+        font-size: 14px;
+      }
+    }
+
+    .right {
+      flex-shrink: 0;
+      list-style-type: none;
+      padding-left: 15px;
+      font-size: 14px;
+
+
+      hr {
+        height: 1px;
+        margin: 5px 0 ;
+        border-color: #b1b1b1;
+        opacity: .4;
+      }
+    }
+  }
+
+  button {
+    height: 65px;
+    width: 85%;
+    background: #ca8300;
+    color: white;
+    text-shadow: 0 0 5px gold;
+    font-family: 'Germania One';
+    font-size: 30px;
+    letter-spacing: 1.4px;
+    border: none;
+    position: absolute;
+    bottom: calc( -65px / 2 );
+    left: 50%;
+    transform: translateX( -50% );
+    box-shadow: 0 4px 10px black;
+    cursor: pointer;
+    transition: all .1s;
+
+    &:hover {
+      background: #df9205;
+      transform: translate( -50%, -5px );
+    }
+  }
+
+}
+
+.wrapper > #quest-rewards-popup {
+
+  background-color: #362108;
+  border-color: #362108;
+  text-align: center;
+  max-width: 300px;
+
+  header {
+    margin-bottom: 15px;
+
+    h1 {
+      font-family: 'Germania One';
+      letter-spacing: 1px;
+      text-shadow: 0 0 10px gold;
+    }
+  }
+
+  ul {
+    list-style-type: none;
+    padding: 20px 0 15px 0;
+    // border: 3px ridge #2d2215;
+    box-shadow: 0 0 30px #222 inset;
+    margin-bottom: 10px;
+    background: #42290c;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center; 
+    border-radius: 5px;
+    position: relative;
+
+    > p {
+      position: absolute;
+      top: -8px;
+      font-family: 'Germania One';
+      font-size: 14px;
+      letter-spacing: 1px;
+      color: #b7b7b7;
+      text-shadow: 0 0 1px black;
+    }
+
+    li {
+      padding: 10px;
+      position: relative;
+      margin: 7.5px;
+      background: #5a3115;
+      box-shadow: 0 2px 10px black;
+      border-radius: 5px;
+      cursor: default;
+
+      &.quest-reward-ores { background: #222; }
+      &.quest-reward-xp { background: #56007d; }
+      &.quest-reward-refined-ores { background: #946000; }
+      &.quest-reward-scroll { background: #525252; }
+
+      h1 {
+        font-family: 'Germania One';
+        text-shadow: 0 0 5px gold;
+        letter-spacing: 4px;
+      }
+
+      img {
+        height: 40px;
+        pointer-events: none;
+      }
+
+      p {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        text-align: center;
+        background: rgba( 0, 0, 0, 0.6 );
+      }
+    }
+  }
+
+  button {
+    background: transparent;
+    border: 1px solid white;
+    color: white;
+    padding: 3px;
+    cursor: pointer;
+  }
+
+}
+
+.quest-area-container {
+  position: relative;
+  // cursor: pointer;
+
+  * {
+    pointer-events: none;
+  }
+
+  .quest-text-log {
+    max-height: 80px;
+    width: 100%;
+    background: rgba( 0, 0, 0, 0.5 );
+    position: absolute;
+    pointer-events: none;
+    opacity: 0;
+    padding: 5px;
+    overflow: auto;
+
+    &.active {
+      opacity: .4;
+
+      &:hover {
+        opacity: .5;
+      }
+    }
+
+    p {
+      pointer-events: none;
+      color: white;
+    }
+  }
+
+  .boost-notifier {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 1px;
+    height: 0;
+    background: white;
+    opacity: 0;
+
+    &.clicked {
+      animation: boost 1s linear forwards;
+    }
+
+    &.active {
+      opacity: 1;
+    }
+  }
+
+  .hero-container {
+    width: calc( 100% - 28px );
+    height: 100%;
+    position: relative;
+
+    .hero {
+      position: absolute;
+      bottom: 30px;
+      color: #aaa;
+      font-size: 40px;
+      opacity: 0;
+      transition: all .1s;
+
+      &.active {
+        opacity: 1;
+      }
+
+      &.moving {
+        animation: moving 1s infinite linear;
+      }
+
+      &.jumping {
+        animation: jumping 1s infinite linear;
+      }
+      
+    }
+  }
+
+  .boss-approaching, .boss-defeated, .quest-failed {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    background: rgba( 0, 0, 0, 0.4 );
+    cursor: pointer;
+
+    h1 {
+      color: #960000;
+      border: 3px solid #960000;
+      letter-spacing: 2px;
+      padding: 15px;
+      position: absolute;
+      font-size: 40px;
+      top: 50%;
+      left: 50%;
+      transform: translate( -50%, -50% );
+      animation: flicker .6s linear alternate-reverse infinite;
+      pointer-events: none;
+      width: fit-content;
+    }
+  }
+
+  .boss-defeated h1 {
+    color: lime;
+    border-color: lime;
+  }
+
+  .boss-container {
+    position: absolute;
+    top: 50%;
+    transform: translateY( -50% );
+    right: 4%;
+    text-align: center;
+
+    p.boss-hp {
+      color: white;
+      transition: color .2s linear;
+
+      .damaged {
+        color: red;
+      }
+    }
+
+    .boss {
+
+      &.dead {
+        animation: dead_boss 1s forwards linear;
+      }
+    }
+  }
+  
+  .timer-container {
+    position: absolute;
+    width: 13px;
+    height: 100%;
+    top: 0;
+    right: 0;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+
+    .timer-outer {
+      position: relative;
+      flex-grow: 1;
+      background: rgba( 255, 255, 255, 0.1 );
+      margin-bottom: 3px;
+
+      .timer-inner {
+        background: black;
+        height: 100%;
+        bottom: 0;
+        width: 100%;
+        position: absolute;
+      }
+    }
+
+    i {
+      color: rgba( 255, 255, 255, 0.3 );
+    }
+  }
+}
+
+.manual-attack {
+  position: absolute;
+  height: 50px;
+  width: 50px;
+  background: url( './assets/images/quest-attack.png' );
+  background-size: 100%;
+  animation: fade_in .3s linear forwards, pulse 1s linear alternate-reverse infinite;
+  cursor: pointer;
+}
+
+@keyframes dead_boss {
+  0% {
+    transform: translateY( 0 ) rotate( 0deg );
+    opacity: 1;
+  }
+  20% {
+    transform: translateY( 25px ) rotate( 90deg );
+    opacity: 1;
+  }
+  100% {
+    transform: translateY( 75px ) rotate( 90deg );
+    opacity: 0;
+  }
+}
+
+@keyframes flicker {
+  0% { opacity: 1 }
+  100% { opacity: .3 }
+}
+
+@keyframes boost {
+  0% { height: 0 }
+  100% { height: 100% }
+}
+
+@keyframes moving {
+  0% {transform: rotate(-5deg);}
+  45% {transform: rotate(-5deg);}
+  50% {transform: rotate(5deg);}
+  95% {transform: rotate(5deg);}
+  100% {transform: rotate(-5deg);} 
+}
+
+@keyframes jumping {
+  0% {transform: translateY(0);}
+  30% {transform: translateY(0);}
+  50% {transform: translateY(-30px);}
+  80% {transform: translateY(-30px);}
+  100% {transform: translateY(0);}
+}
+
+@keyframes damage_boss {
+  0% {
+    color: white;
+  }
+  50% {
+    color: red;
+  }
+  100% {
+    color: white;
+  }
+}

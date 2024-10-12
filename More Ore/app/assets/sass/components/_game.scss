@@ -1,0 +1,436 @@
+.loading-screen {
+  position: absolute;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  background: black;
+  z-index: 999;
+  transition: all .5s;
+
+  &.finished-loading {
+    opacity: 0
+  }
+
+  > p {
+    position: absolute;
+    bottom: 5px;
+    width: 100%;
+    text-align: center;
+    color: white;
+
+    a {
+      color: white;
+      font-weight: bold;
+      opacity: .5;
+      cursor: pointer;
+    }
+  }
+
+  .loading-screen-container {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate( -50%, -50% );
+    color: white;
+    text-align: center;
+
+    img {
+      height: 100px;
+      image-rendering: pixelated;
+    }
+
+    p {
+      font-family: 'Germania One';
+      letter-spacing: 1px;
+      opacity: .7;
+      font-size: 25px;
+    }
+  }
+}
+
+.ore-small {
+  height: 16px !important;
+  width: 16px !important;
+  margin-right: 3px;
+  image-rendering: pixelated;
+}
+
+.container {
+  height: 100vh;
+  width: 100vw;
+  min-width: 800px;
+  display: flex;
+  flex-flow: column nowrap;
+  position: relative;
+  overflow: hidden;
+
+  .game-container {
+    display: flex;
+    flex-flow: row nowrap;
+    height: 100%;
+    width: 100%;
+  
+    > .left {
+      position: relative;
+      display: flex;
+      flex-flow: column nowrap;
+      flex-grow: 1;
+      background-color: #60695d;
+      background-image: url('./assets/images/bg-main_bg.png');
+      background-size: cover;
+      image-rendering: pixelated;
+  
+      .topbar-inventory-container {
+        width: calc( 100% - 40px );
+        margin: 0 20px;
+        display: flex;
+        flex-flow: column nowrap;
+        transform: translateY( -100% );
+        animation: fall_down_in .3s ease-in-out forwards .5s;
+        z-index: 2;
+  
+        .inventory-hanger-container {
+          height: 20px;
+          width: 100%;
+          display: flex;
+          flex-flow: row nowrap;
+          justify-content: space-between;
+  
+          .vertical-separator {
+            margin: 0 40px;
+          }
+        }
+  
+        $topbar-bg-color: #322011;
+        .topbar-inventory {
+          background: $topbar-bg-color;
+          padding: 20px 50px;
+          width: 100%;
+          display: flex;
+          flex-flow: row nowrap;
+          align-items: center;
+          justify-content: space-between;
+          border: 6px ridge #42250f;
+          box-shadow: 0 0 40px #222 inset;
+          // background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAMAAAAp4XiDAAAAUVBMVEWFhYWDg4N3d3dtbW17e3t1dXWBgYGHh4d5eXlzc3OLi4ubm5uVlZWPj4+NjY19fX2JiYl/f39ra2uRkZGZmZlpaWmXl5dvb29xcXGTk5NnZ2c8TV1mAAAAG3RSTlNAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEAvEOwtAAAFVklEQVR4XpWWB67c2BUFb3g557T/hRo9/WUMZHlgr4Bg8Z4qQgQJlHI4A8SzFVrapvmTF9O7dmYRFZ60YiBhJRCgh1FYhiLAmdvX0CzTOpNE77ME0Zty/nWWzchDtiqrmQDeuv3powQ5ta2eN0FY0InkqDD73lT9c9lEzwUNqgFHs9VQce3TVClFCQrSTfOiYkVJQBmpbq2L6iZavPnAPcoU0dSw0SUTqz/GtrGuXfbyyBniKykOWQWGqwwMA7QiYAxi+IlPdqo+hYHnUt5ZPfnsHJyNiDtnpJyayNBkF6cWoYGAMY92U2hXHF/C1M8uP/ZtYdiuj26UdAdQQSXQErwSOMzt/XWRWAz5GuSBIkwG1H3FabJ2OsUOUhGC6tK4EMtJO0ttC6IBD3kM0ve0tJwMdSfjZo+EEISaeTr9P3wYrGjXqyC1krcKdhMpxEnt5JetoulscpyzhXN5FRpuPHvbeQaKxFAEB6EN+cYN6xD7RYGpXpNndMmZgM5Dcs3YSNFDHUo2LGfZuukSWyUYirJAdYbF3MfqEKmjM+I2EfhA94iG3L7uKrR+GdWD73ydlIB+6hgref1QTlmgmbM3/LeX5GI1Ux1RWpgxpLuZ2+I+IjzZ8wqE4nilvQdkUdfhzI5QDWy+kw5Wgg2pGpeEVeCCA7b85BO3F9DzxB3cdqvBzWcmzbyMiqhzuYqtHRVG2y4x+KOlnyqla8AoWWpuBoYRxzXrfKuILl6SfiWCbjxoZJUaCBj1CjH7GIaDbc9kqBY3W/Rgjda1iqQcOJu2WW+76pZC9QG7M00dffe9hNnseupFL53r8F7YHSwJWUKP2q+k7RdsxyOB11n0xtOvnW4irMMFNV4H0uqwS5ExsmP9AxbDTc9JwgneAT5vTiUSm1E7BSflSt3bfa1tv8Di3R8n3Af7MNWzs49hmauE2wP+ttrq+AsWpFG2awvsuOqbipWHgtuvuaAE+A1Z/7gC9hesnr+7wqCwG8c5yAg3AL1fm8T9AZtp/bbJGwl1pNrE7RuOX7PeMRUERVaPpEs+yqeoSmuOlokqw49pgomjLeh7icHNlG19yjs6XXOMedYm5xH2YxpV2tc0Ro2jJfxC50ApuxGob7lMsxfTbeUv07TyYxpeLucEH1gNd4IKH2LAg5TdVhlCafZvpskfncCfx8pOhJzd76bJWeYFnFciwcYfubRc12Ip/ppIhA1/mSZ/RxjFDrJC5xifFjJpY2Xl5zXdguFqYyTR1zSp1Y9p+tktDYYSNflcxI0iyO4TPBdlRcpeqjK/piF5bklq77VSEaA+z8qmJTFzIWiitbnzR794USKBUaT0NTEsVjZqLaFVqJoPN9ODG70IPbfBHKK+/q/AWR0tJzYHRULOa4MP+W/HfGadZUbfw177G7j/OGbIs8TahLyynl4X4RinF793Oz+BU0saXtUHrVBFT/DnA3ctNPoGbs4hRIjTok8i+algT1lTHi4SxFvONKNrgQFAq2/gFnWMXgwffgYMJpiKYkmW3tTg3ZQ9Jq+f8XN+A5eeUKHWvJWJ2sgJ1Sop+wwhqFVijqWaJhwtD8MNlSBeWNNWTa5Z5kPZw5+LbVT99wqTdx29lMUH4OIG/D86ruKEauBjvH5xy6um/Sfj7ei6UUVk4AIl3MyD4MSSTOFgSwsH/QJWaQ5as7ZcmgBZkzjjU1UrQ74ci1gWBCSGHtuV1H2mhSnO3Wp/3fEV5a+4wz//6qy8JxjZsmxxy5+4w9CDNJY09T072iKG0EnOS0arEYgXqYnXcYHwjTtUNAcMelOd4xpkoqiTYICWFq0JSiPfPDQdnt+4/wuqcXY47QILbgAAAABJRU5ErkJggg==);
+  
+          p {
+            font-size: 22px;
+            color: white;
+            // background: $topbar-bg-color;
+            letter-spacing: .5px;
+          }
+        }
+      }
+  
+      .ore-container-wrapper {
+        flex-grow: 1;
+        position: relative;
+  
+        .ore-container {
+          position: absolute;
+          height: 300px;
+          width: 300px;
+          top: 45%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          
+          .ore-sprite {
+            width: 100%;
+            height: auto;
+            position: absolute;
+            bottom: 0;
+            image-rendering: pixelated;
+            transition: transform .1s;
+            cursor: pointer;
+            // border: 2px solid black;
+  
+            &:hover {
+              transform: scale( 1.03 );
+            }
+  
+            &:active {
+              transform: scale( 0.97 );
+            }
+          }
+          
+          .ore-weak-spot-container {
+            pointer-events: none;
+            position: relative;
+          }
+
+          .ore-hp {
+            position: absolute;
+            bottom: -25px;
+            color: rgba( 255, 255, 255, 0.6 );
+            width: 100%;
+            text-align: center;
+            font-family: 'Germania One';
+            letter-spacing: 1px;
+            pointer-events: none;
+
+            .ore-hp-bar-container {
+              top: 20px;
+              position: relative;
+              width: 100%;
+              height: 20px;
+              background: rgba( 0, 0, 0, 0.2 );
+              border: none;
+
+              p {
+                position: absolute;
+                width: 100%;
+                text-align: center;
+                pointer-events: none;
+                font-family: 'Germania One';
+              }
+
+              .ore-hp-bar {
+                background: rgba( 0, 0, 0, 0.5 );
+                height: 100%;
+              }
+            }
+          }
+        }
+      }
+
+      .bottom-area-tabs {
+        display: flex;
+        flex-flow: row nowrap;
+        color: white;
+        position: fixed;
+
+        .tab {
+          border-top-left-radius: 10px;
+          border-top-right-radius: 10px;
+          background: #222;
+          // border: 1px solid black;
+          color: rgba( 255, 255, 255, 0.6 );
+          box-shadow: 0 0px 5px rgba( 0, 0, 0, 0.3 );
+          border-bottom: none;
+          padding: 8px 35px;
+          margin-left: 10px;
+          cursor: pointer;
+          transition: all .15s;
+
+          &:hover {
+            color: rgba( 255, 255, 255, 0.9 );
+            padding-bottom: 20px;
+            transform: translateY( -10px );
+          }
+        }
+      }
+  
+      .settings-container {
+        position: fixed;
+        padding: 5px;
+        display: flex;
+        flex-flow: row nowrap;
+        align-items: flex-end;
+  
+        i, img {
+          color: lightgrey;
+          opacity: .3;
+          padding-right: 5px;
+          cursor: pointer;
+  
+          &:hover {
+            opacity: .5;
+          }
+        }
+
+        img {
+          opacity: .2
+        }
+
+        img {
+          height: 50px;
+        }
+      }
+  
+      .text-scroller-container {
+        background: rgba(0, 0, 0, 0.6);
+        position: relative;
+        height: 30px;
+  
+        .text-scroller {
+          position: absolute;
+          color: white;
+          padding: 0 20px;
+          min-width: max-content;
+        }
+      }
+  
+      .quest-area-container {
+        height: 150px;
+        width: 100%;
+        background: url('./assets/images/misc-mineshaft.png');
+        background-size: auto 100%;
+      }
+    }
+  
+    .right-container {
+      position: relative;
+      display: flex;
+      flex-flow: row nowrap;
+      transition: margin-right .3s ease-in-out;
+      z-index: 2;
+  
+      > .right {
+        width: 300px;
+        height: 100%;
+        background: darkgray;
+        display: flex;
+        flex-flow: column nowrap;
+  
+        .tabs-container {
+          display: flex;
+          flex-flow: row nowrap;
+          justify-content: space-around;
+          text-shadow: 0 0 4px black;
+          background-color: #4e3013;
+          
+          .tab {
+            font-family: 'Germania One';
+            padding: 15px 0;
+            font-size: 40px;
+            color: white;
+            background-color: #4e3013;
+            box-shadow: 0 0 40px #222 inset;
+            letter-spacing: 3px;
+            width: 100%;
+            text-align: center;
+            cursor: pointer;
+            transition: all .1s;
+            filter: blur( .5px ) brightness( 60% );
+            
+            & * {
+              pointer-events: none;
+            }
+  
+            &:hover {
+              opacity: 1;
+              filter: brightness( 90% );
+            }
+  
+            &.selected {
+              opacity: 1;
+              filter: brightness( 100% );
+            }
+
+            &.Smith-tab {
+              background: #222;
+            }
+          }
+        }
+  
+        .tab-content-container {
+          height: 100%;
+          overflow-y: auto;
+          background: linear-gradient( to bottom, lightgrey, #222 );
+  
+          .tab-content {
+            height: 100%;
+
+            &.store {
+              // background: linear-gradient(to bottom, #b78f6d, #331f0b);
+              background: linear-gradient(lightgrey, rgb(25, 8, 0));
+              box-shadow: 0 0 10px #331f0b inset;
+            }
+  
+            &.smith {
+              // background-image: url( './assets/images/bg-smith_bg.png' );
+              // background-repeat: repeat;
+              background-color: linear-gradient(to bottom, #525252, #222);
+              box-shadow: 0 0 10px #222 inset;
+            }
+
+            .buy-amount-container {
+              display: flex;
+              flex-flow: row nowrap;
+              justify-content: space-between;
+              padding: 0 5px;
+              background: url('./assets/images/misc-horizontal_separator.png');
+              background-size: auto 100%;
+              image-rendering: pixelated;
+              color: white;
+
+              p {
+                font-family: 'Germania One';
+                opacity: .7;
+              }
+
+              div {
+                display: flex;
+                flex-flow: row nowrap;
+
+                > p {
+                  padding-left: 8px;
+                  cursor: pointer;
+                  opacity: .5;
+
+                  &.selected {
+                    opacity: 1;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  footer {
+    height: 20px;
+    line-height: 20px;
+    width: 100%;
+    font-size: 12px;
+    overflow: hidden;
+    color: rgba( 255, 255, 255, .5 );
+    text-align: center;
+    transition: color .2s;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 15px;
+
+    img {
+      height: 17px;
+      image-rendering: pixelated;
+      margin-right: 3px;
+    }
+
+    * {
+      font-weight: 300;
+      font-family: 'Abel';
+    }
+  
+    &:hover {
+      color: rgba( 255, 255, 255, .8 );
+    }
+
+    a, span {
+      cursor: pointer;
+      padding: 0 3px;
+      
+      &:hover {
+        color: rgba( 255, 255, 255, .9 )
+      }
+    }
+  
+    a {
+      color: inherit;
+    }
+  
+    span:not( .version-number ) {
+      text-decoration: underline;
+    }
+
+    p {
+      display: flex;
+      flex-flow: row nowrap;
+    }
+  }
+}

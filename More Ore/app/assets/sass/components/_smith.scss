@@ -1,0 +1,201 @@
+.smith-progress-container {
+  display: flex;
+  flex-flow: row nowrap;
+  padding: 10px;
+  box-shadow: 0 0 40px #222 inset;
+  background: #989898;
+
+  > img {
+    // border: 1px solid black;
+    height: 64px;
+    width: 64px;
+    image-rendering: pixelated;
+  }
+
+  > div {
+    display: flex;
+    flex-flow: column nowrap;
+    padding-left: 10px;
+    flex-grow: 1;
+    justify-content: flex-end;
+
+    .progress-bar-container {
+      margin-top: 5px;
+      border: 1px solid #222;
+      height: 30px;
+
+      .progress-bar {
+        width: 0%;
+        height: 100%;
+        background: #222;
+      }
+    }
+  }
+}
+
+.smith-upgrades-wrapper {
+  height: calc( 100% - 33px );
+  display: flex;
+  flex-flow: column nowrap;
+  background-image: url( './assets/images/bg-smith_bg.png' );
+
+  .smith-upgrades-container {
+    flex-grow: 1;
+
+    .smith-upgrades {
+      display: flex;
+      flex-flow: column wrap;
+      width: 100%;
+      padding-bottom: 11px;
+
+      .repeatables .repeatable, .non-repeatable {
+        cursor: pointer;
+
+        * {
+          pointer-events: none;
+        }
+
+        &:hover {
+          box-shadow: 0 0 5px white inset;
+        }
+      }
+
+      .repeatables {
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: space-evenly;
+        // background: #222;
+        padding: 10px 0;
+
+        .repeatable {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 85px;
+          width: 85px;
+          position: relative;
+          max-width: calc( 100% / 3 );
+          background: url( './assets/images/smith_upgrade-repeatables_bg.png' );
+          background-size: 100%;
+          border: none;
+          box-shadow: 0 0 0 3px black, 0 0 20px #222 inset;
+
+          p {
+            position: absolute;
+            width: 100%;
+            color: white;
+            font-family: 'Abel';
+            text-align: center;
+            text-shadow: 0 0 10px black;
+
+            &.upgrade-level {
+              top: 3px;
+              width: 100%;
+            }
+
+            &.upgrade-price {
+              display: flex;
+              flex-flow: row nowrap;
+              align-items: center;
+              justify-content: center;
+              bottom: 0;
+  
+              img {
+                height: 12px;
+                margin-right: 3px;
+              }
+            }
+
+
+          }
+
+          img {
+            height: 64px;
+            image-rendering: pixelated;
+          }
+        }
+      }
+
+      .non-repeatable, .owned {
+        display: flex;
+        flex-flow: row nowrap;
+        align-items: center;
+        background: url( './assets/images/smith_upgrade-non_repeatables_bg.png' );
+        background-size: 100%;
+        color: white;
+        height: 70px;
+        margin: 0 11px;
+        margin-bottom: 10px;
+        box-shadow: 0 0 30px #222 inset, 0 0 0 3px black;
+        position: relative;
+
+        img {
+          height: 64px;
+          image-rendering: pixelated;
+          margin-right: 5px;
+        }
+
+        > div {
+          display: flex;
+          flex-flow: column nowrap;
+
+          h1 {
+            font-family: 'Germania One';
+            text-shadow: 0 0 5px black;
+            letter-spacing: .5px;
+          }
+
+          > p {
+            display: flex;
+            flex-flow: row nowrap;
+            align-items: center;
+
+            img {
+              height: 15px;
+            }
+          }
+        }
+
+        .new {
+          position: absolute;
+          top: -5px;
+          left: -10px;
+          animation: new_sign 1s linear alternate-reverse infinite;
+          font-family: 'Germania One';
+          text-shadow: 0 0 2px black;
+          color: crimson;
+        }
+      }
+    
+      > p {
+        width: 100%;
+        color: white;
+        padding: 11px 0 11px 22px;
+        font-family: 'Germania One';
+        letter-spacing: 1px;
+        text-shadow: 0 0 5px black;
+    
+        &.available-upgrade-text {
+          text-shadow: 0 0 5px black, 0 0 10px gold;
+          font-size: 24px;
+        }
+    
+        &.locked-upgrade-text {
+          opacity: .6;
+        }
+      }
+  
+    }
+  }
+
+  
+}
+
+@keyframes new_sign {
+  0% {
+    transform: rotate( -40deg )
+  }
+  100% {
+    transform: rotate( -50deg )
+  }
+}

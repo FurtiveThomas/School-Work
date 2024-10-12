@@ -1,0 +1,221 @@
+.tooltip {
+  // display: flex;
+  flex-flow: column nowrap;
+  position: absolute;
+  background: #222;
+  // border-radius: 5px;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+  color: white;
+  padding: 10px;
+  box-shadow: 0 2px 10px rgba( 0, 0, 0, 0.3 );
+  min-width: 350px;
+  z-index: 6;
+  border: 5px ridge #353535;
+  display: none;
+
+  .top {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+
+    img {
+      // height: 50px;
+      // width: 50px;
+      image-rendering: pixelated;
+    }
+
+    h1 {
+      font-family: 'Germania One';
+      padding-left: 10px;
+      flex-grow: 1;
+      font-size: 30px;
+      padding-right: 10px;
+      letter-spacing: .8px;
+
+      small {
+        font-size: 12px;
+        font-family: 'Abel';
+        opacity: .7;
+      }
+    }
+
+    .upgrade-price, .building-price {
+      padding-left: 20px;
+
+      &.not-enough {
+        color: #c70000;
+      }
+    }
+  }
+
+  hr {
+    margin: 10px 0;
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+
+  .bottom {
+    // padding-top: 10px;
+
+    .desc {
+      padding-bottom: 10px;
+    }
+
+    ul {
+      list-style-type: none;
+      padding-bottom: 10px;
+
+      li {
+        font-size: 14px;
+        opacity: .7;
+
+      }
+    }
+  }
+
+  .flavor-text {
+    text-align: right;
+    font-size: 12px;
+    font-style: italic;
+    opacity: .8;
+  }
+
+  .sharpness-info, .hardness-info {
+
+    h2 {
+      font-family: 'Germania One';
+      letter-spacing: .7px;
+    }
+
+    > p {
+      opacity: 0.7;
+    }
+    
+    ul {
+      list-style-type: none;
+
+      li {
+        color: rgba( 255, 255, 255, 0.5 );
+        font-size: 16px;
+
+        strong {
+          color: white;
+          opacity: 1;
+        }
+
+        &:first-of-type {
+          font-size: 18px;
+          color: rgba( 255, 255, 255, 0.8 );
+        }
+
+      }
+
+      hr {
+        margin: 0;
+      }
+    }
+  }
+
+  .skill-tooltip {
+    display: flex;
+    flex-flow: row nowrap;
+
+    max-width: 300px;
+
+    img {
+      height: 40px;
+      width: 40px;
+    }
+
+    .info {
+      padding-left: 10px;
+
+      h1 {
+        font-family: 'Germania One';
+        font-size: 25px;
+      }
+
+      .requirements {
+        padding-top: 5px;
+        color: #de0000;
+
+        ul {
+          list-style-type: none;
+
+          li {
+
+            &.owned {
+              color: white;
+              opacity: .6;
+            }
+
+            &.not-owned {
+              color: #de0000;
+            }
+
+          }
+        }
+      }
+
+      .skill-flavor_text {
+        padding: 5px 0;
+        font-style: italic;
+        opacity: .7;
+      }
+
+    }
+  }
+
+  &.generation {
+    min-width: fit-content;
+
+    .generation-tooltip {
+      text-align: center;
+
+      p {
+        font-size: 14px;
+        opacity: .6;
+      }
+      
+      h1 {
+        font-family: 'Germania One';
+      }
+    }
+  }
+
+  &.gem-tooltip-container {
+    width: fit-content;
+    min-width: fit-content;
+
+    .gem-tooltip {
+      text-align: center;
+
+      .gem-image-container {
+        padding: 15px;
+        border-radius: 5px;
+        background: rgba( 0, 0, 0, 0.3 );
+        box-shadow: 0 0 20px #111 inset;
+        width: fit-content;
+        // background: white;
+        margin: 0 auto;
+      }
+
+      .gem-level {
+        opacity: .7;
+      }
+
+      h1 {
+        padding-top: 5px;
+        font-family: 'Germania One';
+        font-size: 20px;
+        letter-spacing: .5px;
+      }
+
+      small:not( .gem-level ) {
+        padding-top: 20px;
+      }
+
+    }
+  }
+  
+}

@@ -1,0 +1,64 @@
+.tab-content.skills {
+  background-color: black;
+  display: flex;
+  flex-flow: column nowrap;
+
+  header {
+    color: white;
+    // background: #222;
+    box-shadow: 0 4px 20px #222;
+    text-align: center;
+    height: 100px;
+    min-height: 100px;
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    justify-content: center;
+
+    h1 {
+      font-family: 'Germania One';
+      letter-spacing: 1px;
+      font-size: 35px;
+      text-shadow: 0 0 10px gold;
+    }
+
+    p {
+      opacity: .6;
+    }
+  }
+
+  .skills-container {
+    // height: 1000px;
+    height: 100%;
+    // flex-grow: 1;
+    // background: rgba();
+    position: relative;
+    overflow-y: auto;
+
+    .skill {
+      position: absolute;
+      background: black;
+      box-shadow: 0 0 15px gold;
+
+      &.small {
+        border-radius: 50%;
+      }
+
+      &:hover {
+        cursor: pointer;
+      }
+
+      &.not-owned {
+        opacity: .5;
+      }
+
+      &.locked {
+        opacity: .3;
+      }
+
+      .owned {
+        opacity: 1;
+      }
+    }
+  }
+}

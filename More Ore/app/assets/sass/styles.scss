@@ -1,0 +1,51 @@
+* { 
+  margin: 0; 
+  padding: 0; 
+  box-sizing: border-box; 
+  font-family: 'Asap Condensed';
+  user-select: none;
+  -webkit-user-drag: none;
+  cursor: default;
+}
+
+::-webkit-scrollbar {
+  width: 1px;  /* remove scrollbar space */
+  // background: transparent;  /* optional: just make scrollbar invisible */
+}
+
+button {
+  cursor: pointer;
+}
+
+.fa.fa-times {
+  cursor: pointer;
+}
+
+@import './common/variables';
+
+@import './components/separators';
+@import './components/game';
+@import './components/animations';
+@import './components/torch';
+@import './components/building';
+@import './components/upgrade';
+@import './components/tooltip';
+@import './components/particles';
+@import './components/wrapper';
+@import './components/smith';
+@import './components/automater';
+@import './components/slider';
+@import './components/achievement';
+@import './components/gold_nugget';
+@import './components/item';
+@import './components/pickaxe';
+@import './components/refine';
+@import './components/combo_sign';
+@import './components/tutorial';
+@import './components/quest';
+@import './components/spinner';
+@import './components/skills';
+@import './components/item_rarity';
+@import './components/inventory';
+
+

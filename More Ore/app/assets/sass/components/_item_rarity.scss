@@ -1,0 +1,19 @@
+$uncommon-color: #5dff51;
+$rare-color: #1f41ff;
+$unique-color: #7751ff;
+$epic-color: #faff51;
+$legendary-color: #ff7e51;
+$mythic-color: #c60000;
+
+.pickaxe-name {
+  font-family: 'Germania One';
+
+  &.Common { color: white; }
+  &.Uncommon{ color: $uncommon-color; }
+  &.Rare { color: $rare-color; }
+  &.Unique { color: $unique-color; }
+  &.Epic { color: $epic-color; }
+  &.Legendary { color: $legendary-color; }
+  &.Mythic { color: $mythic-color; }
+
+}

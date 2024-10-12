@@ -1,0 +1,146 @@
+.automater-wrapper {
+    position: absolute;
+    flex-flow: row nowrap;
+    color: white;
+    transition: left .3s;
+    display: none;
+    z-index: 2;
+
+
+    header {
+        font-size: 14px;
+        padding: 20px 0;
+        writing-mode: vertical-lr;
+        text-orientation: mixed;
+        transform: rotate( 180deg );
+        letter-spacing: 5px;
+        line-height: 25px;
+        cursor: pointer;
+        background: #222;
+        border-top-right-radius: 10px;
+        border-bottom-right-radius: 10px;
+    }
+
+    > div {
+        padding: 0 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: rgba(0, 0, 0, 0.7);
+
+        .automater-container {
+            position: relative;
+        }
+    }
+}
+
+.automater-toggle-visibility {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+
+    i {
+        padding-right: 5px;
+    }
+}
+
+.automater {
+    height: 65px;
+    width: 65px;
+    border: 1px solid white;
+    background: rgba( 255, 255, 255, .5 );
+    position: absolute;
+    display: flex;
+    flex-flow: column nowrap;
+    transition: background .1s;
+    cursor: default;
+
+    &.display {
+        margin-top: 15px;
+        pointer-events: none;
+        position: relative;
+        
+    }
+
+    &.real {
+        transition: opacity .2s;
+        opacity: 0;
+        pointer-events: all;
+        cursor: move;
+
+        &:active {
+            opacity: 1;
+        }
+
+        &.set {
+            opacity: .8;
+        }
+
+        &:hover {
+            .top-bar {
+                background: rgba( 255, 255, 255, 1)
+            }
+        }
+
+        &.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .top-bar {
+            background: rgba(255, 255, 255, .6);
+            
+            i {
+                pointer-events: all;
+                cursor: pointer;
+
+                &:hover {
+                    color: gray;
+                }
+            }
+        }
+    }
+
+    .top-bar {
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: flex-end;
+        align-items: center;
+        background: white;
+        padding: 2px 0;
+        pointer-events: none;
+
+        i {
+            color: #222;
+            font-size: 12px;
+        }
+    }
+
+    .automater-target {
+        flex-grow: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        pointer-events: none;
+
+        img {
+            opacity: .3;
+            pointer-events: none;
+        }
+    }
+
+    .owned {
+        position: absolute;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 20px;
+        width: 20px;
+        border-radius: 50%;
+        background: red;
+        color: white;
+        top: -10px;
+        right: -10px;
+        z-index: 1;
+    }
+}

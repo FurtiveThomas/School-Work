@@ -1,0 +1,78 @@
+// Building image size should be 32x32 scaled up to 64x64 
+
+.building {
+    display: flex;
+    flex-flow: row nowrap;
+    padding: 5px 20px 5px 0;
+    align-items: center;
+    color: white;
+    letter-spacing: .6px;
+    background: url( './assets/images/misc-building_button.png' );
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    box-shadow: 0 0 20px #222 inset;
+    height: 70px;
+    cursor: pointer;
+    position: relative;
+
+    &:not(.hidden):hover {
+        box-shadow: 0 0 5px #fff inset;
+    }
+
+    &.hidden {
+        opacity: .7;
+        filter: brightness( 60% );
+        cursor: not-allowed;
+
+        img {
+            filter: brightness( 0% );
+        }
+    }
+
+    * {
+        font-family: 'Germania One';
+        pointer-events: none;
+    }
+
+    .left {
+        padding-right: 5px;
+    }
+
+    .middle {
+        flex-grow: 1;
+
+        h1 {
+            text-shadow: 0 0 1px black;
+        }
+
+        p {
+            display: flex;
+            flex-flow: row nowrap;
+            align-items: center;
+
+            img {
+                height: 16px;
+                width: 16px;
+                image-rendering: pixelated;
+                margin-right: 3px;
+            }
+
+            color: #222;
+
+            span.not-enough {
+                color: #c70000;
+            }
+        }
+    }
+
+    .right {
+        position: absolute;
+        right: 15px;
+        opacity: .4;
+
+        h1 {
+            font-size: 40px;
+            text-shadow: 0 0 3px black;
+        }
+    }
+}

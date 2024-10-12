@@ -1,0 +1,59 @@
+.gold-nugget {
+  z-index: 3;
+  position: absolute;
+  height: 38px;
+  width: 36px;
+  // border: 1px solid black;
+  cursor: pointer;
+  image-rendering: pixelated;
+  background: url( './assets/images/misc-gold_nugget.png') no-repeat center;
+}
+
+.gold-rush-container, .ore-madness-cover {
+  position: absolute;
+  pointer-events: none;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  background: rgba(255,215,0, 0.1);
+  box-shadow: 0 0 40px gold inset;
+  z-index: 2;
+
+  .gold-nugget {
+    pointer-events: all;
+    transition: top 5s;
+  }
+}
+
+.ore-madness-cover {
+  background: rgba(228, 0, 0, 0.2);
+  box-shadow: 0 0 40px crimson inset;
+}
+
+.ore-madness {
+  animation: screen_shake .8s linear infinite;
+}
+
+@keyframes fall_down {
+  from {
+    top: 0;
+  }
+  to {
+    top: 100%;
+  }
+}
+
+@keyframes screen_shake {
+  0% { transform: translate(2px, 1px) rotate(0deg); }
+	10% { transform: translate(-1px, -2px) rotate(-1deg); }
+	20% { transform: translate(-3px, 0px) rotate(1deg); }
+	30% { transform: translate(0px, 2px) rotate(0deg); }
+	40% { transform: translate(1px, -1px) rotate(1deg); }
+	50% { transform: translate(-1px, 2px) rotate(-1deg); }
+	60% { transform: translate(-3px, 1px) rotate(0deg); }
+	70% { transform: translate(2px, 1px) rotate(-1deg); }
+	80% { transform: translate(-1px, -1px) rotate(1deg); }
+	90% { transform: translate(2px, 2px) rotate(0deg); }
+	100% { transform: translate(1px, -2px) rotate(-1deg); }
+}

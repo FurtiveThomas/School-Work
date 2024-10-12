@@ -1,0 +1,154 @@
+.achievement-notification-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  // background: rgba(0, 0, 0, 0.5);
+  pointer-events: none;
+  overflow-y: hidden;
+  overflow-x: visible;
+  z-index: 2;
+
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: flex-end;
+
+  .achievement {
+    display: flex;
+    flex-flow: column nowrap;
+    flex-shrink: 0;
+    min-width: 350px;
+    background: #222;
+    border: 5px ridge #c7c7c7;
+    animation: winAchievement 5s ease-in-out forwards;
+    padding: 10px;
+    overflow: hidden;
+
+    color: white;
+
+    header {
+      padding-bottom: 10px;
+      display: flex;
+      flex-flow: row nowrap;
+      align-items: flex-end;
+
+      img {
+        margin-right: 10px;
+      }
+
+      h1 {
+        font-size: 25px;
+
+        small {
+          color: rgba( 255, 255, 255, 0.5 );
+          font-size: 13px;
+        }
+      }
+    }
+
+    p:not(.achievement-reward) {
+      padding-bottom: 10px;
+    }
+
+    .achievement-reward {
+      color: lightgreen;
+
+      &:last-child {
+        padding-bottom: 10px;
+      }
+    }
+
+    small {
+      font-style: italic;
+      opacity: 0.5;
+      text-align: right;
+    }
+  }
+
+}
+
+@keyframes winAchievement {
+  0% {
+    opacity: 0;
+    transform: translateY( 100% );
+  }
+
+  10% {
+    opacity: 1;
+    transform: translateY( 0 );
+    margin-top: 0;
+  }
+
+  90% {
+    opacity: 1;
+    transform: translateY( 0 );
+    margin-top: 0;
+  }
+
+  100% {
+    transform: translateY( 100% );
+    opacity: 0;
+  }
+}
+
+.wrapper > .stats-container {
+  width: 390px;
+
+  ul {
+    list-style-type: none;
+    font-size: 14px;
+    padding: 20px 40px;
+    background: rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 20px #0e0e0e inset;
+    border-radius: 10px;
+    margin: 20px auto;
+    width: fit-content;
+    text-align: center;
+
+    h2 {
+      font-family: 'Germania One';
+    }
+
+    li {
+      letter-spacing: .5px;
+      padding: 1px 0;
+
+      span {
+        opacity: .6;
+        padding-right: 3px;
+      }
+    }
+  }
+
+  hr {
+    width: 20%;
+    margin: 10px 0;
+  }
+
+  .achievement-container {
+    display: flex;
+    flex-flow: row wrap;
+    // justify-content: flex-start;
+    justify-content: center;
+
+    h1 {
+      width: 100%;
+    }
+
+    .achievement-square {
+      height: 50px;
+      width: 50px;
+      border: 5px ridge #222;
+      background-size: 100%;
+
+      &:hover {
+        box-shadow: 0 0 10px white inset;
+      }
+
+      &.locked {
+        filter: brightness( 30% );
+      }
+    }
+
+  }
+}

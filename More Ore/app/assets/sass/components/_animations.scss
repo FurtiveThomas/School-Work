@@ -1,0 +1,148 @@
+@keyframes flyingNumber {
+    
+    0% {
+        transform: translateY(0), scale( 1 );
+    }
+    5% {
+        transform: scale(1.8);
+    }
+    10% {
+        transform: scale(1);
+    }
+    50% {
+        opacity: 1
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-200px);
+    }
+}
+
+@keyframes combo_loss {
+    0% {
+        transform: translateY( 0 )
+    }
+    70% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+        transform: translateY( 100px )
+    }
+}
+
+
+@keyframes buildingFlyingNumber {
+    from {
+        transform: translateY(0);
+        opacity: .4;
+    }
+    to {
+        transform: translateY(-150px);
+        opacity: .1;
+    }
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+  
+@keyframes upDown {
+    0% {
+        transform: translateY( 100% )
+    }
+    20% {
+        transform: translateY( 0 )
+    }
+    80% {
+        transform: translateY( 0 )
+    }
+    100% {
+        transform: translateY( 100% )
+    }
+}
+
+@keyframes slide_up_in {
+    0% {
+        top: 70%;
+        opacity: 0;
+    }
+
+    100% {
+        top: 50%;
+        opacity: 1;
+    }
+}
+
+@keyframes slide_down_out {
+    0% {
+        top: 50%;
+        // opacity: 1;
+    }
+
+    100% {
+        top: 70%;
+        // opacity: 0;
+    }
+}
+
+@keyframes fade_out {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+@keyframes fade_in {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fade_in_up {
+    from {
+        opacity: 0;
+        transform: translateX( -20px )
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX( 0 )
+    }
+}
+
+@keyframes fade_in_out {
+    0% { opacity: 0 ; }
+    20% { opacity: 1; }
+    80% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+@keyframes rotate {
+    100% { transform: rotate( 360deg ); }
+}
+
+@keyframes fall_down_in {
+    0% {
+        transform: translateY( -100% )
+    }
+
+    100% {
+        transform: translateY( 0% )
+    }
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale( 1 )
+    }
+    100% {
+        transform: scale( 1.1 )
+    }
+}
