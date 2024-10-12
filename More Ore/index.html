@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+
+<html>
+
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- <title>More Ore - Idle Clicker Incremental RPG about ORES!</title> -->
+    <!-- <link rel="shortcut icon" href="assets/images/misc_tiny-rock.ico" /> -->
+    <link rel="stylesheet" href="./app/styles.css">
+    <!-- <link rel="stylesheet" href="./app/assets/libs/dragula.css"> -->
+    <link href="https://fonts.googleapis.com/css?family=Asap+Condensed:400,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Abel" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Germania+One" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <meta name="description" content="More Ore - A clicker, incremental, and idle game with RPG elements">
+    <meta name="keywords" content="game, clicker game, incremental game, idle game, more ore, isyn, incremental, idle, clicker, More Ore"/>
+    <meta name="author" content="Syn Studios"/>
+    <meta name="robots" content="follow"/>
+    <meta name="google-site-verification" content="Kcf483s9v0NmdgqhL4lOH6jXPisuMn_YtZqaeF05o7Q" />
+
+    <script src="./app/assets/scripts/constants.js"></script>
+    <script src='./app/assets/scripts/State.js'></script>
+
+    <!-- Global Site Tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-105854273-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments)};
+      gtag('js', new Date());
+      gtag('config', 'UA-105854273-1');
+    </script>
+
+  </head>
+
+  <body>
+
+    <div class="loading-screen">
+      <div class="loading-screen-container">
+        <img src="./app/assets/images/misc-logo.png" alt="logo">
+        <p class='loading-text'>Loading...</p>
+      </div>
+      <p>If the game doesn't load, your save file may be corrupted. You can contact me on <a href='https://discord.gg/NU99mMQ' target='_blank'>Discord</a>! or <a href="#" onclick='localStorage.clear(); location.reload()'>Wipe your save</a>!</p>
+    </div>
+
+    <div class="container">
+      
+      <div class="torch torch-left"></div>
+      <div class="torch torch-right"></div>
+      <div class="tooltip"></div>
+
+      <div class="combo-sign-container"></div>
+
+      <div class="horizontal-separator"></div>
+      <div class="game-container">
+        <div class="vertical-separator left-vertical-separator"></div>
+        <section class="left">
+
+          <div class="achievement-notification-container">
+          </div>
+
+          <div class="topbar-inventory-container">
+            <div class="inventory-hanger-container">
+              <div class="vertical-separator"></div>
+              <div class="vertical-separator"></div>
+            </div>
+            <div class="topbar-inventory">
+              <div class="left">
+                <p id='ores-amount'></p>
+                <p id='refined-ores-amount'></p>
+              </div>
+              <div class="right">
+                <p 
+                  onmouseover='TT.show( event, { name: null, type: "generation" } )'
+                  onmouseout='TT.hide()'
+                  id='generation-lvl'></p>
+              </div>
+            </div>
+          </div>
+
+          <div class="ore-container-wrapper">
+            <div class="ore-container">
+              <img class='ore-sprite' src="./app/assets/images/ore1-1.png" alt="ore sprite">
+              <div class="ore-weak-spot-container">
+                <div class="ore-weak-spot">
+                  <div class="ore-weak-spot-outer"></div>
+                  <div class="ore-weak-spot-inner"></div>
+                </div>
+              </div>
+              <p class='ore-hp'></p>
+            </div>
+          </div>
+
+          <div class="bottom-area-tabs"></div>
+
+          <div class="settings-container">
+            <i onclick='build_achievements(); play_sound( "misc" )' class='fa fa-bar-chart fa-2x'></i>
+            <i onclick='build_settings(); play_sound( "misc" )' class='fa fa-cog fa-2x'></i>
+            <img onclick='confirm_refine(); play_sound( "misc" )' style='display: none;' src="./app/assets/images/misc-refine.svg" class='refine-btn' alt="refine-btn">
+          </div>
+
+          <div class="text-scroller-container">
+            <div class="horizontal-separator thin"></div>
+          </div>
+
+          <div class="horizontal-separator thin"></div>
+          <div onclick='handle_quest_area_click(event)' class="quest-area-container">
+            <div class="boost-notifier"></div>
+            <div class="quest-text-log"></div>
+            <div class="hero-container">
+              <i class='hero fa fa-male fa-1x'></i>
+            </div>
+          </div>
+        </section>
+
+        <div class="automater-wrapper">
+          <header onclick='toggle_automater_accordion()'>AUTOMATER</header>
+          <div>
+            <div class="automater-container">
+              <div class='automater-toggle-visibility'>
+                <i class="fa fa-eye-slash fa-1x"></i>
+                <label class="switch">
+                  <input onchange='toggle_automater_visibility()' type="checkbox">
+                  <span class="slider round"></span>
+                </label>
+              </div>
+              <div class="automater display">
+                <div class="owned"></div>
+                <div class="top-bar">
+                  <i class="fa fa-times"></i>
+                </div>
+                <div class="automater-target">
+                  <img src="./app/assets/images/misc-crosshair.png" alt="crosshair-img">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <section class="right-container">
+          <div class="vertical-separator middle-vertical-separator"></div>
+          <div class="right">
+            <div class="tabs-container"></div>
+            <div class="horizontal-separator thin dark"></div>
+            <div class="tab-content-container">
+              <div class="tab-content"></div>
+            </div>
+          </div>
+          <div class="vertical-separator right-vertical-separator"></div>
+        </section>
+      </div>
+      <div class="horizontal-separator footer">
+        <footer>
+            <p><img src="./app/assets/images/misc-logo.png" alt="logo"> v.<span class='version-number'></span> created by <a href='https://synclairwang.com'>Syn Studios</a></p>
+            <p><a href='https://discord.gg/NU99mMQ' target='_blank'>Join the Discord!</a> | <span onclick='save_game()'>Save Game</span> | <span onclick='wipe_save()'>Wipe Save</span></p>
+          </footer>
+      </div>
+    </div>
+
+    <!-- <script src='./app/assets/libs/howler.js'></script> -->
+    <script src='./app/assets/libs/dragndrop.js'></script>
+    <script src='./app/assets/libs/bignumber.js'></script>
+    <!-- <script src='./app/assets/libs/dragula.js'></script> -->
+
+    <script src='./app/assets/scripts/helper_functions.js'></script>
+    <script src='./app/assets/scripts/Building.js'></script>
+    <script src='./app/assets/scripts/Upgrade.js'></script>
+    <script src='./app/assets/scripts/Tabs.js'></script>
+    <script src='./app/assets/scripts/RisingNumber.js'></script>
+    <script src='./app/assets/scripts/TextScroller.js'></script>
+    <script src='./app/assets/scripts/Tooltip.js'></script>
+    <script src='./app/assets/scripts/SmithUpgrade.js'></script>
+    <script src='./app/assets/scripts/Smith.js'></script>
+    <script src='./app/assets/scripts/Automater.js'></script>
+    <script src='./app/assets/scripts/Achievement.js'></script>
+    <script src='./app/assets/scripts/Pickaxe.js'></script>
+    <script src='./app/assets/scripts/Quest.js'></script>
+    <script src='./app/assets/scripts/Skills.js'></script>
+    <script src='./app/assets/scripts/Gem.js'></script>
+    <script src='./app/assets/scripts/Adventurer.js'></script>
+    <script src='./app/assets/scripts/QuestLog.js'></script>
+    <script src='./app/assets/scripts/Scroll.js'></script>
+
+    <script src='./app/main.js'></script>
+  </body>
+
+</html>
