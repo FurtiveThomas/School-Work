@@ -2,7 +2,7 @@
 * open the game you want an run the index.html to play it
 * join my school d i s c o r d https://discord.gg/TeCSpkvTAw 
 * ALL MADE BY Skidkid420/FurtiveThomas
-*school work to learn and have fun ----> https://math.sci.dvbris.com/ 
+* school work to learn and have fun ----> https://math.sci.dvbris.com/ 
 
 *games I stole
 https://github.com/quinnsalt/GeometryDash-Unblocked
