@@ -12,6 +12,8 @@ https://schellingb.github.io/LoveWebBuilder/package
 python
 html5
 github
+java script
+css
 
 
 
