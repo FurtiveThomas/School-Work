@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sigma Graphing Calculator By SkibKid420</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom"></script>
+    <style>
+        body {
+            display: flex;
+            flex-direction: row;
+            background-color: #1a1d22;
+            color: white;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            height: 100vh;
+            overflow: hidden;
+        }
+        h1 {
+            margin: 20px 0;
+            text-align: center;
+            color: #b22222; /* Dark red for header */
+        }
+        #sidebar, #symbolPanel {
+            width: 250px;
+            padding: 20px;
+            background-color: #2a2e33;
+            border: 2px solid #b22222; /* Dark red for borders */
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto; /* Enable vertical scrolling */
+            max-height: 100vh; /* Full height */
+        }
+        #functionList {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            flex-grow: 1;
+        }
+        #functionList li {
+            margin: 10px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #3a3f47;
+            padding: 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s, transform 0.3s;
+            opacity: 0; /* Start invisible */
+            transform: translateY(-10px); /* Start slightly higher */
+        }
+        #functionList li.show {
+            opacity: 1; /* Fade in */
+            transform: translateY(0); /* Move to original position */
+            transition: opacity 0.5s, transform 0.5s; /* Transition for appearance */
+        }
+        #functionList li:hover {
+            background-color: #4a4e55;
+        }
+        #functionList li button {
+            background: transparent;
+            color: #b22222; /* Dark red for buttons */
+            border: none;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        #functionList li button:hover {
+            color: #cd5c5c; /* Lighter red on hover */
+        }
+        #calculator {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            flex-grow: 1;
+            background-color: #1a1d22;
+        }
+        input {
+            padding: 10px;
+            margin: 10px;
+            width: 300px;
+            border: none;
+            border-radius: 5px;
+            background-color: #3a3f47;
+            color: white;
+            font-size: 16px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+        }
+        input::placeholder {
+            color: #b22222; /* Dark red for placeholder */
+        }
+        button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #b22222; /* Dark red for main button */
+            color: white; /* Text color for buttons */
+            font-size: 16px;
+            transition: background-color 0.3s, transform 0.2s;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+        }
+        button:hover {
+            background-color: #cd5c5c; /* Lighter red on hover */
+            transform: scale(1.05);
+        }
+        #mainContainer {
+            display: flex;
+            flex-grow: 1;
+            height: 100%;
+        }
+        #symbolPanel {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 20px;
+            background-color: #2a2e33;
+            border-left: 2px solid #b22222; /* Dark red for borders */
+            width: 250px;
+            box-shadow: -2px 0 10px rgba(0, 0, 0, 0.5);
+            overflow-y: auto; /* Enable vertical scrolling */
+            max-height: 100vh; /* Full height */
+        }
+        #symbolPanel button {
+            margin: 5px 0;
+            background-color: #3a3f47;
+            color: #b22222; /* Dark red for buttons */
+            width: 100%;
+            text-align: left;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        #symbolPanel button:hover {
+            background-color: #4a4e55;
+        }
+        #chart {
+            width: 100%;
+            height: 400px;
+            margin-top: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+        }
+        #helpModal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #2a2e33;
+            color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            display: none;
+        }
+        #helpModal button {
+            margin-top: 10px;
+            background-color: #b22222;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div id="sidebar">
+        <h1>Functions</h1>
+        <ul id="functionList"></ul>
+        <button id="saveFunctions">Save Functions</button>
+        <button id="loadFunctions">Load Functions</button>
+        <button id="showHelp">Help</button>
+    </div>
+    <div id="mainContainer">
+        <div id="calculator">
+            <input type="text" id="functionInput" placeholder="Enter functions (e.g., Math.sin(x), x ** 2)" />
+            <button id="plotButton">Plot Functions</button>
+            <canvas id="chart"></canvas>
+        </div>
+    </div>
+    
+    <div id="helpModal">
+        <h2>Help</h2>
+        <p>Enter functions in the input field (e.g., sin(x), x^2).</p>
+        <p>Click "Plot Functions" to visualize them. Use the "Remove" button to delete a function.</p>
+        <p>Save and load your functions using the respective buttons.</p>
+
+        <button id="closeHelp">Close</button>
+    </div>
+
+    <script>
+        const ctx = document.getElementById('chart').getContext('2d');
+        const chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: []
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'X-axis',
+                            color: '#b22222' // Dark red for axis title
+                        },
+                        grid: {
+                            color: '#444c55',
+                        },
+                        ticks: {
+                            color: '#b22222' // Dark red for x-axis ticks
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Y-axis',
+                            color: '#b22222' // Dark red for axis title
+                        },
+                        grid: {
+                            color: '#444c55',
+                        },
+                        ticks: {
+                            color: '#b22222' // Dark red for y-axis ticks
+                        }
+                    }
+                },
+                plugins: {
+                    zoom: {
+                        pan: {
+                            enabled: true,
+                            mode: 'xy'
+                        },
+                        zoom: {
+                            wheel: {
+                                enabled: true // Enable zooming with the mouse wheel
+                            },
+                            pinch: {
+                                enabled: true // Enable pinch zooming on touch devices
+                            },
+                            drag: {
+                                enabled: true // Enable dragging to zoom
+                            }
+                        }
+                    },
+                    legend: {
+                        labels: {
+                            color: '#b22222' // Dark red for legend labels
+                        }
+                    }
+                }
+            }
+        });
+
+        const functionList = document.getElementById('functionList');
+        const plotButton = document.getElementById('plotButton');
+        const saveButton = document.getElementById('saveFunctions');
+        const loadButton = document.getElementById('loadFunctions');
+        const showHelpButton = document.getElementById('showHelp');
+        const helpModal = document.getElementById('helpModal');
+        const closeHelpButton = document.getElementById('closeHelp');
+        const functionInput = document.getElementById('functionInput');
+
+        plotButton.onclick = () => {
+            const func = functionInput.value;
+            if (!func) {
+                alert('Please enter a function.');
+                return;
+            }
+
+            const xValues = Array.from({ length: 201 }, (_, i) => i - 100);
+            const yValues = xValues.map(x => {
+                try {
+                    return (new Function('x', 'return ' + func))(x);
+                } catch (error) {
+                    return null;
+                }
+            });
+
+            const validYValues = yValues.filter(y => y !== null);
+            if (validYValues.length === 0) {
+                alert(`Function "${func}" did not produce any valid results.`);
+                return;
+            }
+
+            const dataset = {
+                label: func,
+                data: validYValues,
+                borderColor: `hsl(${(chart.data.datasets.length * 50) % 360}, 100%, 50%)`,
+                borderWidth: 2,
+                fill: false,
+            };
+            chart.data.datasets.push(dataset);
+            chart.data.labels = xValues.slice(0, validYValues.length);
+            chart.update();
+
+            const listItem = document.createElement('li');
+            listItem.textContent = func;
+
+            const removeButton = document.createElement('button');
+            removeButton.textContent = 'Remove';
+            removeButton.onclick = () => {
+                chart.data.datasets = chart.data.datasets.filter(dataset => dataset.label !== func);
+                chart.update();
+                functionList.removeChild(listItem);
+            };
+
+            listItem.appendChild(removeButton);
+            functionList.appendChild(listItem);
+            setTimeout(() => {
+                listItem.classList.add('show');
+            }, 100);
+            functionInput.value = ''; // Clear input after plotting
+        };
+
+        saveButton.onclick = () => {
+            const functions = [...functionList.children].map(li => li.textContent.replace("Remove", "").trim());
+            localStorage.setItem('savedFunctions', JSON.stringify(functions));
+            alert('Functions saved!');
+        };
+
+        loadButton.onclick = () => {
+            const savedFunctions = JSON.parse(localStorage.getItem('savedFunctions'));
+            if (savedFunctions) {
+                plotFunctions(savedFunctions);
+                alert('Functions loaded!');
+            } else {
+                alert('No saved functions found.');
+            }
+        };
+
+        showHelpButton.onclick = () => {
+            helpModal.style.display = 'block';
+        };
+
+        closeHelpButton.onclick = () => {
+            helpModal.style.display = 'none';
+        };
+
+        function plotFunctions(functions) {
+            const xValues = Array.from({ length: 201 }, (_, i) => i - 100);
+            const newDatasets = [];
+
+            functions.forEach(func => {
+                const yValues = xValues.map(x => {
+                    try {
+                        return (new Function('x', 'return ' + func))(x);
+                    } catch (error) {
+                        return null;
+                    }
+                });
+
+                const validYValues = yValues.filter(y => y !== null);
+                if (validYValues.length === 0) {
+                    alert(`Function "${func}" did not produce any valid results.`);
+                    return;
+                }
+
+                const dataset = {
+                    label: func,
+                    data: validYValues,
+                    borderColor: `hsl(${(newDatasets.length * 50) % 360}, 100%, 50%)`,
+                    borderWidth: 2,
+                    fill: false,
+                };
+                newDatasets.push(dataset);
+
+                const listItem = document.createElement('li');
+                listItem.textContent = func;
+
+                const removeButton = document.createElement('button');
+                removeButton.textContent = 'Remove';
+                removeButton.onclick = () => {
+                    chart.data.datasets = chart.data.datasets.filter(dataset => dataset.label !== func);
+                    chart.update();
+                    functionList.removeChild(listItem);
+                };
+
+                listItem.appendChild(removeButton);
+                functionList.appendChild(listItem);
+                setTimeout(() => {
+                    listItem.classList.add('show');
+                }, 100);
+            });
+
+            if (newDatasets.length > 0) {
+                chart.data.datasets.push(...newDatasets);
+                chart.data.labels = xValues.slice(0, Math.max(...newDatasets.map(d => d.data.length)));
+                chart.update();
+            }
+        }
+    </script>
+</body>
+</html>

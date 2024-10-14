@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML5 Desmos Clone</title>
+    <style>
+        /* Reset default margins and paddings */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        /* Controls Section */
+        #controls {
+            padding: 10px;
+            background-color: #f4f4f4;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        #controls input {
+            flex: 1;
+            padding: 8px;
+            font-size: 16px;
+        }
+
+        #controls button {
+            padding: 8px 16px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        /* Error Message */
+        #error {
+            color: red;
+            padding: 5px 10px;
+            display: none;
+            background-color: #ffe6e6;
+        }
+
+        /* Main Content */
+        #main {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        /* Graph Area */
+        #graphContainer {
+            flex: 1;
+            position: relative;
+        }
+
+        #graph {
+            width: 100%;
+            height: 100%;
+            background-color: #ffffff;
+            border: 1px solid #ccc;
+            display: block;
+        }
+
+        /* Function List Sidebar */
+        #functionList {
+            width: 250px;
+            background: #f9f9f9;
+            border-left: 1px solid #ccc;
+            padding: 10px;
+            overflow-y: auto;
+        }
+
+        #functionList h3 {
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+
+        .function-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .color-box {
+            width: 15px;
+            height: 15px;
+            margin-right: 10px;
+            border: 1px solid #000;
+        }
+
+        .function-text {
+            flex: 1;
+            font-size: 14px;
+        }
+
+        .remove-button {
+            background: #ff4d4d;
+            border: none;
+            color: white;
+            cursor: pointer;
+            padding: 2px 5px;
+            font-size: 12px;
+            border-radius: 3px;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 600px) {
+            #functionList {
+                display: none; /* Hide sidebar on small screens */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Controls Section -->
+    <div id="controls">
+        <input type="text" id="functionInput" placeholder="Enter function, e.g., y = x^2 + 3x - 4">
+        <button id="plotButton">Plot</button>
+    </div>
+
+    <!-- Error Message -->
+    <div id="error"></div>
+
+    <!-- Main Content -->
+    <div id="main">
+        <!-- Graph Container -->
+        <div id="graphContainer">
+            <canvas id="graph"></canvas>
+        </div>
+
+        <!-- Function List Sidebar -->
+        <div id="functionList">
+            <h3>Plotted Functions</h3>
+            <div id="functionsContainer"></div>
+        </div>
+    </div>
+
+    <!-- Include Math.js Library Without Integrity Attribute -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.8.0/math.min.js" crossorigin="anonymous"></script>
+
+    <script>
+        // DOM Elements
+        const canvas = document.getElementById('graph');
+        const ctx = canvas.getContext('2d');
+        const plotButton = document.getElementById('plotButton');
+        const functionInput = document.getElementById('functionInput');
+        const errorDiv = document.getElementById('error');
+        const functionsContainer = document.getElementById('functionsContainer');
+
+        // Global Variables
+        let scale = 40; // pixels per unit
+        let offsetX = 0;
+        let offsetY = 0;
+        const plottedFunctions = [];
+
+        // Initialize Canvas Size
+        function resizeCanvas() {
+            canvas.width = canvas.parentElement.clientWidth;
+            canvas.height = canvas.parentElement.clientHeight;
+            offsetX = canvas.width / 2;
+            offsetY = canvas.height / 2;
+            drawAxes();
+            plotAllFunctions();
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        window.addEventListener('load', resizeCanvas);
+
+        // Draw Axes and Grid
+        function drawAxes() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.beginPath();
+            ctx.strokeStyle = '#000000';
+            ctx.lineWidth = 1;
+
+            // X-axis
+            ctx.moveTo(0, offsetY);
+            ctx.lineTo(canvas.width, offsetY);
+
+            // Y-axis
+            ctx.moveTo(offsetX, 0);
+            ctx.lineTo(offsetX, canvas.height);
+
+            ctx.stroke();
+
+            // Draw Grid
+            drawGrid();
+        }
+
+        function drawGrid() {
+            const step = scale; // pixels per unit
+            ctx.beginPath();
+            ctx.strokeStyle = '#e0e0e0';
+            ctx.lineWidth = 1;
+
+            // Vertical Grid Lines
+            for (let x = offsetX; x < canvas.width; x += step) {
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, canvas.height);
+            }
+            for (let x = offsetX; x > 0; x -= step) {
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, canvas.height);
+            }
+
+            // Horizontal Grid Lines
+            for (let y = offsetY; y < canvas.height; y += step) {
+                ctx.moveTo(0, y);
+                ctx.lineTo(canvas.width, y);
+            }
+            for (let y = offsetY; y > 0; y -= step) {
+                ctx.moveTo(0, y);
+                ctx.lineTo(canvas.width, y);
+            }
+
+            ctx.stroke();
+        }
+
+        // Plot All Stored Functions
+        function plotAllFunctions() {
+            plottedFunctions.forEach(func => {
+                plotSingleFunction(func.input, func.color);
+            });
+        }
+
+        // Plot Function from Input
+        function plotFunction() {
+            const input = functionInput.value.trim();
+            if (!input) {
+                displayError('Please enter a function to plot.');
+                return;
+            }
+
+            // Parse the Function
+            let expr;
+            try {
+                // Remove 'y =' or 'f(x) =' if present
+                const cleanedInput = input.replace(/y\s*=/i, '').replace(/f\s*\(\s*x\s*\)\s*=/i, '').trim();
+                console.log('Cleaned Input:', cleanedInput); // Debugging
+                expr = math.compile(cleanedInput);
+            } catch (error) {
+                console.error('Error compiling function:', error);
+                displayError('Invalid function. Please check your input.');
+                return;
+            }
+
+            // Assign a Random Color
+            const color = getRandomColor();
+
+            // Store the Function
+            plottedFunctions.push({ input: input, color: color });
+
+            // Add Function to Sidebar
+            addFunctionToList(input, color);
+
+            // Clear Error Messages
+            clearError();
+
+            // Plot the Function
+            plotSingleFunction(input, color);
+        }
+
+        // Plot a Single Function
+        function plotSingleFunction(input, color) {
+            let expr;
+            try {
+                const cleanedInput = input.replace(/y\s*=/i, '').replace(/f\s*\(\s*x\s*\)\s*=/i, '').trim();
+                expr = math.compile(cleanedInput);
+            } catch (error) {
+                console.error('Error compiling function for plotting:', error);
+                displayError('Error compiling function for plotting.');
+                return;
+            }
+
+            ctx.beginPath();
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 2;
+
+            const xStart = -offsetX / scale;
+            const xEnd = (canvas.width - offsetX) / scale;
+            const step = 1 / scale; // Increment for x
+
+            let firstPoint = true;
+            let prevY = 0;
+
+            for (let x = xStart; x <= xEnd; x += step) {
+                let y;
+                try {
+                    y = expr.evaluate({ x: x });
+                    if (typeof y !== 'number' || !isFinite(y)) {
+                        firstPoint = true;
+                        continue;
+                    }
+                } catch (err) {
+                    console.error(`Error evaluating function at x = ${x}:`, err);
+                    firstPoint = true;
+                    continue;
+                }
+
+                const canvasX = offsetX + x * scale;
+                const canvasY = offsetY - y * scale;
+
+                // Debugging: Log points near x=0
+                if (Math.abs(x) < 1e-2) {
+                    console.log(`x: ${x.toFixed(2)}, y: ${y.toFixed(2)}, canvasX: ${canvasX.toFixed(2)}, canvasY: ${canvasY.toFixed(2)}`);
+                }
+
+                if (firstPoint) {
+                    ctx.moveTo(canvasX, canvasY);
+                    firstPoint = false;
+                } else {
+                    // Simple Clipping
+                    if (Math.abs(canvasY - prevY) < canvas.height) {
+                        ctx.lineTo(canvasX, canvasY);
+                    } else {
+                        ctx.moveTo(canvasX, canvasY);
+                    }
+                }
+                prevY = canvasY;
+            }
+
+            ctx.stroke();
+        }
+
+        // Generate Random Color
+        function getRandomColor() {
+            const letters = '0123456789ABCDEF';
+            let color = '#';
+            for (let i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+
+        // Display Error Messages
+        function displayError(message) {
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+        }
+
+        // Clear Error Messages
+        function clearError() {
+            errorDiv.textContent = '';
+            errorDiv.style.display = 'none';
+        }
+
+        // Add Function to Sidebar List
+        function addFunctionToList(input, color) {
+            const funcDiv = document.createElement('div');
+            funcDiv.className = 'function-item';
+
+            const colorBox = document.createElement('div');
+            colorBox.className = 'color-box';
+            colorBox.style.backgroundColor = color;
+
+            const funcText = document.createElement('span');
+            funcText.className = 'function-text';
+            funcText.textContent = input;
+
+            const removeBtn = document.createElement('button');
+            removeBtn.className = 'remove-button';
+            removeBtn.textContent = 'Remove';
+            removeBtn.addEventListener('click', () => {
+                removeFunction(input, color, funcDiv);
+            });
+
+            funcDiv.appendChild(colorBox);
+            funcDiv.appendChild(funcText);
+            funcDiv.appendChild(removeBtn);
+
+            functionsContainer.appendChild(funcDiv);
+        }
+
+        // Remove Function from Sidebar and Canvas
+        function removeFunction(input, color, funcDiv) {
+            // Remove from plottedFunctions array
+            const index = plottedFunctions.findIndex(func => func.input === input && func.color === color);
+            if (index !== -1) {
+                plottedFunctions.splice(index, 1);
+            }
+
+            // Remove from UI
+            functionsContainer.removeChild(funcDiv);
+
+            // Redraw Axes and Plot Remaining Functions
+            drawAxes();
+            plotAllFunctions();
+        }
+
+        // Event Listeners
+        plotButton.addEventListener('click', plotFunction);
+
+        functionInput.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                plotFunction();
+            }
+        });
+
+        // Initial Plot
+        functionInput.value = 'y = x^2';
+        plotFunction();
+    </script>
+</body>
+</html>
