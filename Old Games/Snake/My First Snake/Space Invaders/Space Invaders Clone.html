@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Space Invaders Clone</title>
+    <style>
+        body {
+            background-color: #000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            height: 100vh;
+            justify-content: center;
+        }
+        canvas {
+            background-color: #111;
+            border: 2px solid #fff;
+        }
+        #info {
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>👾 Space Invaders Clone</h1>
+    <div id="info">
+        <span id="score">Score: 0</span>
+    </div>
+    <canvas id="gameCanvas" width="600" height="400"></canvas>
+
+    <script>
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
+
+        // Player
+        const playerWidth = 50;
+        const playerHeight = 30;
+        let playerX = (canvas.width - playerWidth) / 2;
+        const playerY = canvas.height - playerHeight - 10;
+        const playerSpeed = 5;
+        let rightPressed = false;
+        let leftPressed = false;
+
+        // Bullet
+        const bulletWidth = 5;
+        const bulletHeight = 10;
+        const bulletSpeed = 7;
+        let bullets = [];
+
+        // Alien
+        const alienRows = 5;
+        const alienCols = 10;
+        const alienWidth = 40;
+        const alienHeight = 30;
+        const alienPadding = 10;
+        const alienOffsetTop = 30;
+        const alienOffsetLeft = 30;
+        let aliens = [];
+        let alienDirection = 1; // 1: right, -1: left
+        let alienSpeed = 1;
+        let alienMoveDown = false;
+
+        // Score
+        let score = 0;
+        document.getElementById("score").innerText = `Score: ${score}`;
+
+        // Initialize aliens
+        for(let c = 0; c < alienCols; c++) {
+            aliens[c] = [];
+            for(let r = 0; r < alienRows; r++) {
+                aliens[c][r] = { x: 0, y: 0, status: 1 };
+                let alienX = c * (alienWidth + alienPadding) + alienOffsetLeft;
+                let alienY = r * (alienHeight + alienPadding) + alienOffsetTop;
+                aliens[c][r].x = alienX;
+                aliens[c][r].y = alienY;
+            }
+        }
+
+        // Event listeners
+        document.addEventListener("keydown", keyDownHandler, false);
+        document.addEventListener("keyup", keyUpHandler, false);
+        document.addEventListener("keydown", shootHandler, false);
+
+        function keyDownHandler(e) {
+            if(e.key === "Right" || e.key === "ArrowRight") {
+                rightPressed = true;
+            }
+            else if(e.key === "Left" || e.key === "ArrowLeft") {
+                leftPressed = true;
+            }
+        }
+
+        function keyUpHandler(e) {
+            if(e.key === "Right" || e.key === "ArrowRight") {
+                rightPressed = false;
+            }
+            else if(e.key === "Left" || e.key === "ArrowLeft") {
+                leftPressed = false;
+            }
+        }
+
+        function shootHandler(e) {
+            if(e.key === " " || e.key === "Spacebar") { // Spacebar
+                bullets.push({ x: playerX + playerWidth / 2 - bulletWidth / 2, y: playerY });
+            }
+        }
+
+        function drawPlayer() {
+            ctx.beginPath();
+            ctx.rect(playerX, playerY, playerWidth, playerHeight);
+            ctx.fillStyle = "#00FF00";
+            ctx.fill();
+            ctx.closePath();
+        }
+
+        function drawBullets() {
+            ctx.fillStyle = "#FFFF00";
+            bullets.forEach((bullet, index) => {
+                ctx.beginPath();
+                ctx.rect(bullet.x, bullet.y, bulletWidth, bulletHeight);
+                ctx.fill();
+                ctx.closePath();
+                // Move bullet
+                bullet.y -= bulletSpeed;
+                // Remove bullet if it goes off screen
+                if(bullet.y < 0) {
+                    bullets.splice(index, 1);
+                }
+            });
+        }
+
+        function drawAliens() {
+            for(let c = 0; c < alienCols; c++) {
+                for(let r = 0; r < alienRows; r++) {
+                    if(aliens[c][r].status === 1) {
+                        let alienX = aliens[c][r].x;
+                        let alienY = aliens[c][r].y;
+                        ctx.beginPath();
+                        ctx.rect(alienX, alienY, alienWidth, alienHeight);
+                        ctx.fillStyle = "#FF0000";
+                        ctx.fill();
+                        ctx.closePath();
+                    }
+                }
+            }
+        }
+
+        function moveAliens() {
+            let edgeReached = false;
+            for(let c = 0; c < alienCols; c++) {
+                for(let r = 0; r < alienRows; r++) {
+                    if(aliens[c][r].status === 1) {
+                        aliens[c][r].x += alienSpeed * alienDirection;
+                        // Check for edge
+                        if(aliens[c][r].x + alienWidth >= canvas.width - alienOffsetLeft || aliens[c][r].x <= alienOffsetLeft) {
+                            edgeReached = true;
+                        }
+                    }
+                }
+            }
+            if(edgeReached) {
+                alienDirection *= -1;
+                for(let c = 0; c < alienCols; c++) {
+                    for(let r = 0; r < alienRows; r++) {
+                        if(aliens[c][r].status === 1) {
+                            aliens[c][r].y += alienHeight / 2;
+                            // Check if any alien has reached the player
+                            if(aliens[c][r].y + alienHeight >= playerY) {
+                                clearInterval(game);
+                                alert("👽 GAME OVER");
+                                document.location.reload();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        function collisionDetection() {
+            bullets.forEach((bullet, bIndex) => {
+                for(let c = 0; c < alienCols; c++) {
+                    for(let r = 0; r < alienRows; r++) {
+                        let alien = aliens[c][r];
+                        if(alien.status === 1) {
+                            if(bullet.x < alien.x + alienWidth &&
+                               bullet.x + bulletWidth > alien.x &&
+                               bullet.y < alien.y + alienHeight &&
+                               bullet.y + bulletHeight > alien.y) {
+                                // Collision detected
+                                alien.status = 0;
+                                bullets.splice(bIndex, 1);
+                                score += 10;
+                                document.getElementById("score").innerText = `Score: ${score}`;
+                                // Increase alien speed slightly
+                                alienSpeed += 0.05;
+                                // Check if all aliens are destroyed
+                                if(score === alienRows * alienCols * 10) {
+                                    clearInterval(game);
+                                    alert("🎉 YOU WIN! Congratulations!");
+                                    document.location.reload();
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawPlayer();
+            drawBullets();
+            drawAliens();
+            collisionDetection();
+            moveAliens();
+
+            // Move player
+            if(rightPressed && playerX < canvas.width - playerWidth - 10) {
+                playerX += playerSpeed;
+            }
+            else if(leftPressed && playerX > 10) {
+                playerX -= playerSpeed;
+            }
+        }
+
+        let game = setInterval(draw, 30);
+    </script>
+</body>
+</html>

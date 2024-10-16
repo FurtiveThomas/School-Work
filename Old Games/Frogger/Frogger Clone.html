@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Frogger Clone</title>
+    <style>
+        body {
+            background-color: #222;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #fff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            height: 100vh;
+            justify-content: center;
+        }
+        canvas {
+            background-color: #333;
+            border: 2px solid #fff;
+        }
+        #info {
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>🐸 Frogger Clone</h1>
+    <div id="info">
+        <span id="score">Score: 0</span> | 
+        <span id="lives">Lives: 3</span>
+    </div>
+    <canvas id="froggerCanvas" width="600" height="600"></canvas>
+
+    <script>
+        const canvas = document.getElementById('froggerCanvas');
+        const ctx = canvas.getContext('2d');
+
+        const ROWS = 12;
+        const COLS = 12;
+        const TILE_SIZE = 50;
+
+        let score = 0;
+        let lives = 3;
+
+        // Define game state
+        const gameState = {
+            player: { x: 5, y: 11 },
+            cars: [],
+            logs: [],
+            gameOver: false,
+        };
+
+        // Define car and log speeds
+        const carSpeed = 2;
+        const logSpeed = 1.5;
+
+        // Define lanes
+        const lanes = [
+            { type: 'road', y: 1, direction: 1, speed: carSpeed },
+            { type: 'road', y: 2, direction: -1, speed: carSpeed },
+            { type: 'road', y: 3, direction: 1, speed: carSpeed },
+            { type: 'river', y: 5, direction: -1, speed: logSpeed },
+            { type: 'river', y: 6, direction: 1, speed: logSpeed },
+            { type: 'river', y: 7, direction: -1, speed: logSpeed },
+        ];
+
+        // Initialize cars and logs
+        function initVehicles() {
+            lanes.forEach(lane => {
+                if (lane.type === 'road') {
+                    // Initialize cars
+                    for (let i = 0; i < 3; i++) {
+                        gameState.cars.push({
+                            x: Math.random() * COLS,
+                            y: lane.y,
+                            direction: lane.direction,
+                            speed: lane.speed,
+                        });
+                    }
+                } else if (lane.type === 'river') {
+                    // Initialize logs
+                    for (let i = 0; i < 2; i++) {
+                        gameState.logs.push({
+                            x: Math.random() * COLS,
+                            y: lane.y,
+                            direction: lane.direction,
+                            speed: lane.speed,
+                        });
+                    }
+                }
+            });
+        }
+
+        initVehicles();
+
+        // Handle player movement
+        document.addEventListener('keydown', event => {
+            if (gameState.gameOver) return;
+            switch(event.key) {
+                case 'ArrowUp':
+                    if (gameState.player.y > 0) gameState.player.y -=1;
+                    break;
+                case 'ArrowDown':
+                    if (gameState.player.y < ROWS -1) gameState.player.y +=1;
+                    break;
+                case 'ArrowLeft':
+                    if (gameState.player.x > 0) gameState.player.x -=1;
+                    break;
+                case 'ArrowRight':
+                    if (gameState.player.x < COLS -1) gameState.player.x +=1;
+                    break;
+            }
+        });
+
+        // Update positions of cars and logs
+        function updateVehicles() {
+            gameState.cars.forEach(car => {
+                car.x += car.direction * car.speed * 0.05;
+                // Wrap around
+                if (car.x < -1) car.x = COLS;
+                if (car.x > COLS) car.x = -1;
+            });
+
+            gameState.logs.forEach(log => {
+                log.x += log.direction * log.speed * 0.05;
+                // Wrap around
+                if (log.x < -2) log.x = COLS;
+                if (log.x > COLS) log.x = -2;
+            });
+        }
+
+        // Check collisions
+        function checkCollisions() {
+            // Check if player is on road
+            if (gameState.player.y >=1 && gameState.player.y <=3) {
+                const playerX = gameState.player.x;
+                const playerY = gameState.player.y;
+                const collision = gameState.cars.some(car => {
+                    return Math.abs(car.x - playerX) < 0.5 && car.y === playerY;
+                });
+                if (collision) {
+                    loseLife();
+                }
+            }
+
+            // Check if player is on river
+            if (gameState.player.y >=5 && gameState.player.y <=7) {
+                const playerX = gameState.player.x;
+                const playerY = gameState.player.y;
+                const onLog = gameState.logs.some(log => {
+                    return Math.abs(log.x - playerX) < 1 && log.y === playerY;
+                });
+                if (onLog) {
+                    // Move player with log
+                    const log = gameState.logs.find(log => Math.abs(log.x - playerX) < 1 && log.y === playerY);
+                    gameState.player.x += log.direction * log.speed * 0.05;
+                    // Check boundaries
+                    if (gameState.player.x < 0 || gameState.player.x >= COLS) {
+                        loseLife();
+                    }
+                } else {
+                    // Player falls into river
+                    loseLife();
+                }
+            }
+
+            // Check if player reached goal
+            if (gameState.player.y ===0) {
+                score += 100;
+                document.getElementById('score').innerText = `Score: ${score}`;
+                resetPlayer();
+            }
+        }
+
+        // Lose a life
+        function loseLife() {
+            lives--;
+            document.getElementById('lives').innerText = `Lives: ${lives}`;
+            if (lives <=0) {
+                gameOver();
+            } else {
+                resetPlayer();
+            }
+        }
+
+        // Reset player position
+        function resetPlayer() {
+            gameState.player = { x: 5, y: 11 };
+        }
+
+        // Game Over
+        function gameOver() {
+            gameState.gameOver = true;
+            alert(`😢 GAME OVER\nYour Score: ${score}`);
+            document.location.reload();
+        }
+
+        // Draw the game
+        function drawGame() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw grid
+            for (let x=0; x<COLS; x++) {
+                for (let y=0; y<ROWS; y++) {
+                    ctx.strokeStyle = '#555';
+                    ctx.strokeRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+                }
+            }
+
+            // Draw cars
+            gameState.cars.forEach(car => {
+                ctx.fillStyle = '#FF0000';
+                ctx.fillRect(car.x * TILE_SIZE, car.y * TILE_SIZE, TILE_SIZE, TILE_SIZE / 2);
+            });
+
+            // Draw logs
+            gameState.logs.forEach(log => {
+                ctx.fillStyle = '#8B4513';
+                ctx.fillRect(log.x * TILE_SIZE, log.y * TILE_SIZE + TILE_SIZE /4, TILE_SIZE * 2, TILE_SIZE / 2);
+            });
+
+            // Draw player
+            ctx.fillStyle = '#00FF00';
+            ctx.beginPath();
+            ctx.arc(gameState.player.x * TILE_SIZE + TILE_SIZE /2, gameState.player.y * TILE_SIZE + TILE_SIZE /2, TILE_SIZE /3, 0, Math.PI *2);
+            ctx.fill();
+            ctx.closePath();
+        }
+
+        // Main game loop
+        function gameLoop() {
+            updateVehicles();
+            checkCollisions();
+            drawGame();
+            if (!gameState.gameOver) {
+                requestAnimationFrame(gameLoop);
+            }
+        }
+
+        gameLoop();
+    </script>
+</body>
+</html>
