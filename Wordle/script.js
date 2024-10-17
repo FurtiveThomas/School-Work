@@ -44,8 +44,7 @@ function checkGuess() {
         return;
     }
 
-    const row = document.createElement('div');
-    row.classList.add('row');
+    const guessRow = document.createElement('div');
     for (let i = 0; i < guess.length; i++) {
         const letterBox = document.createElement('div');
         letterBox.textContent = guess[i].toUpperCase();
@@ -56,9 +55,9 @@ function checkGuess() {
         } else {
             letterBox.classList.add('gray');
         }
-        row.appendChild(letterBox);
+        guessRow.appendChild(letterBox);
     }
-    grid.appendChild(row);
+    grid.appendChild(guessRow);
     guessCount++;
 
     gameResult += `Guess ${guessCount}: ${guess.toUpperCase()} `;
@@ -88,7 +87,7 @@ function checkGuess() {
 submitButton.addEventListener('click', checkGuess);
 
 shareButton.addEventListener('click', () => {
-    const finalMessage = `I played Worldle Unlimited!\n${gameResult}`;
+    const finalMessage = `I played Worldle Clone By SkibKid420!\n${gameResult}`;
     navigator.clipboard.writeText(finalMessage).then(() => {
         message.textContent = 'Result copied to clipboard!';
     }).catch(err => {
