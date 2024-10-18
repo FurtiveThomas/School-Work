@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connect 4 - Two Player</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            background-color: #2f2f2f; /* Dark grey background */
+            color: #ffffff; /* White text color */
+        }
+
+        #header {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px;
+        }
+
+        #board {
+            display: grid;
+            grid-template-columns: repeat(7, 80px);
+            grid-gap: 5px;
+            margin: 20px auto;
+            width: 600px;
+        }
+
+        .cell {
+            width: 80px;
+            height: 80px;
+            background-color: #444444; /* Dark grey cells */
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background-color 0.3s; /* Smooth transition for hover effect */
+        }
+
+        .red {
+            background-color: #9B0000; /* Blood red */
+        }
+
+        .yellow {
+            background-color: #FFD700; /* Bright yellow */
+        }
+
+        #message {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8); /* Semi-transparent background */
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            visibility: hidden; /* Hidden by default */
+            z-index: 10; /* Higher z-index to ensure it overlays the board */
+        }
+
+        .modal.visible {
+            visibility: visible; /* Show when game over or winner */
+        }
+
+        #reset {
+            padding: 10px 20px;
+            font-size: 18px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #9B0000; /* Blood red button */
+            color: #ffffff; /* White text */
+            cursor: pointer;
+            transition: background-color 0.3s; /* Smooth transition for button hover */
+        }
+
+        #reset:hover {
+            background-color: #a00000; /* Darker blood red on hover */
+        }
+
+        .active {
+            border: 2px solid #FFD700; /* Highlight border for the active player */
+        }
+    </style>
+</head>
+<body>
+    <div id="header">
+        <div id="player1" style="margin-right: auto;" class="active">Player 1 (Red)</div>
+        <div id="player2" style="margin-left: auto;">Player 2 (Yellow)</div>
+    </div>
+    <div id="board"></div>
+    <p id="message">Player 1's turn (Red)</p>
+
+    <div id="winnerScreen" class="modal">
+        <p id="winnerMessage"></p>
+        <button id="reset">Try Again</button>
+    </div>
+
+    <script>
+        const board = [];
+        const rows = 6;
+        const cols = 7;
+        let currentPlayer = 1; // 1 for Red, 2 for Yellow
+        let gameActive = true;
+
+        const createBoard = () => {
+            for (let row = 0; row < rows; row++) {
+                board[row] = [];
+                for (let col = 0; col < cols; col++) {
+                    board[row][col] = 0;
+                    const cell = document.createElement('div');
+                    cell.classList.add('cell');
+                    cell.dataset.col = col;
+                    cell.addEventListener('click', handleClick);
+                    document.getElementById('board').appendChild(cell);
+                }
+            }
+        };
+
+        const handleClick = (event) => {
+            if (!gameActive) return;
+
+            const col = event.target.dataset.col;
+            const row = findAvailableRow(col);
+
+            if (row !== -1) {
+                board[row][col] = currentPlayer;
+                const cell = document.querySelectorAll('.cell')[row * cols + parseInt(col)];
+                cell.classList.add(currentPlayer === 1 ? 'red' : 'yellow');
+
+                if (checkWinner(row, col)) {
+                    document.getElementById('winnerMessage').textContent = `Player ${currentPlayer === 1 ? 'Red' : 'Yellow'} wins!`;
+                    document.getElementById('winnerScreen').classList.add('visible');
+                    gameActive = false;
+                } else if (isBoardFull()) {
+                    document.getElementById('winnerMessage').textContent = "It's a draw!";
+                    document.getElementById('winnerScreen').classList.add('visible');
+                    gameActive = false;
+                } else {
+                    currentPlayer = currentPlayer === 1 ? 2 : 1;
+                    document.getElementById('message').textContent = `Player ${currentPlayer}'s turn (${currentPlayer === 1 ? 'Red' : 'Yellow'})`;
+                    updatePlayerHighlight();
+                }
+            }
+        };
+
+        const findAvailableRow = (col) => {
+            for (let row = rows - 1; row >= 0; row--) {
+                if (board[row][col] === 0) {
+                    return row;
+                }
+            }
+            return -1;
+        };
+
+        const checkWinner = (row, col) => {
+            return checkDirection(row, col, 1, 0) || // Horizontal
+                   checkDirection(row, col, 0, 1) || // Vertical
+                   checkDirection(row, col, 1, 1) || // Diagonal \
+                   checkDirection(row, col, 1, -1);  // Diagonal /
+        };
+
+        const checkDirection = (row, col, rowDir, colDir) => {
+            let count = 1;
+            const winningCells = [[row, col]];
+
+            // Check one direction
+            for (let i = 1; i < 4; i++) {
+                const r = row + rowDir * i;
+                const c = col + colDir * i;
+                if (r >= 0 && r < rows && c >= 0 && c < cols && board[r][c] === currentPlayer) {
+                    count++;
+                    winningCells.push([r, c]);
+                } else {
+                    break;
+                }
+            }
+
+            // Check the opposite direction
+            for (let i = 1; i < 4; i++) {
+                const r = row - rowDir * i;
+                const c = col - colDir * i;
+                if (r >= 0 && r < rows && c >= 0 && c < cols && board[r][c] === currentPlayer) {
+                    count++;
+                    winningCells.push([r, c]);
+                } else {
+                    break;
+                }
+            }
+
+            if (count >= 4) {
+                highlightWinningDiscs(winningCells);
+                return true;
+            }
+            return false;
+        };
+
+        const isBoardFull = () => {
+            for (let col = 0; col < cols; col++) {
+                if (board[0][col] === 0) {
+                    return false;
+                }
+            }
+            return true;
+        };
+
+        const highlightWinningDiscs = (winningCells) => {
+            winningCells.forEach(([row, col]) => {
+                const cell = document.querySelectorAll('.cell')[row * cols + col];
+                cell.style.border = '3px solid #FFD700'; // Highlight winning cells with a golden border
+            });
+        };
+
+        const resetGame = () => {
+            document.getElementById('board').innerHTML = '';
+            for (let i = 0; i < rows; i++) {
+                board[i] = Array(cols).fill(0); // Reset the board array
+            }
+            currentPlayer = 1;
+            gameActive = true;
+            document.getElementById('message').textContent = "Player 1's turn (Red)";
+            document.getElementById('winnerScreen').classList.remove('visible');
+            updatePlayerHighlight();
+            createBoard();
+        };
+
+        const updatePlayerHighlight = () => {
+            document.getElementById('player1').classList.toggle('active', currentPlayer === 1);
+            document.getElementById('player2').classList.toggle('active', currentPlayer === 2);
+        };
+
+        document.getElementById('reset').addEventListener('click', resetGame);
+
+        createBoard();
+    </script>
+</body>
+</html>
