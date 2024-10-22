@@ -113,10 +113,10 @@
         // Event Listener for Key Presses
         document.addEventListener("keydown", (e) => {
             const key = e.key;
-            if (key === "ArrowUp") pacMan.nextDir = 'UP';
-            if (key === "ArrowDown") pacMan.nextDir = 'DOWN';
-            if (key === "ArrowLeft") pacMan.nextDir = 'LEFT';
-            if (key === "ArrowRight") pacMan.nextDir = 'RIGHT';
+            if (key === "w") pacMan.nextDir = 'UP';
+            if (key === "s") pacMan.nextDir = 'DOWN';
+            if (key === "a") pacMan.nextDir = 'LEFT';
+            if (key === "d") pacMan.nextDir = 'RIGHT';
         });
 
         // Move Pac-Man
