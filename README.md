@@ -1,4 +1,4 @@
-* Ethan Jenson and Allen Moroccan get back to work.
+* Ethan Jayden Jenson and Coleman Corn get back to work.
 * open the game you want an run the index.html to play it
 * join my school d i s c o r d https://discord.gg/TeCSpkvTAw 
 * ALL MADE BY Skidkid420/FurtiveThomas
